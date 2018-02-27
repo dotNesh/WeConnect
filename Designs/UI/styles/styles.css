@@ -1,3 +1,12 @@
+body {
+    background-image: url("../img/home23.jpg");
+    height: 500px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
 .navbar-nav{
     margin-left: 700px;
     color: cornsilk
@@ -5,4 +14,37 @@
 .nav-item{
     margin-left: 20px;
     font-weight: 600;
+}
+
+.jumbotron{
+     opacity: 0.7;   
+}
+
+.landing-page-detail{
+    width: 50%;
+    height: 70%;
+    padding-top: 85px;
+    padding-left: 50px;
+    float: left;
+}
+.landing-aside{
+    float: right;
+    width:30%;
+}
+
+.form-group{
+    width: 300px;
+    font-family: sans-serif;
+    padding-left: 10px;
+    
+}
+.login-form{
+    color: rgb(8, 8, 8);
+}
+h3{
+    padding: 5%; 
+}
+#demo{
+    width: 75%;
+    background-color: white;
 }

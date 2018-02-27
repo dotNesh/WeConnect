@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="styles/styles.css" />
     <!--Bootstrap styles-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -25,13 +27,52 @@
                     <a class="nav-link" href="#">Contacts</a>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-primary">Sign up</button>
+                    <button class="btn btn-primary" data-toggle="collapse" data-target="#demo">Sign up</button>
                 </li>
                 <li class="nav-item">
                     <button class="btn btn-success">Log In</button>
                 </li>
             </ul>
         </nav>
+
+        <div class="landing-page-detail">
+            <div class="jumbotron">
+                <h1 class="display-3">WeConnect</h1>
+                <hr class="my-4">
+                <p class="lead">"WeConnect provides a platform that brings businesses and individuals together.It gives the users the ability to write reviews about the businesses they have interacted with."</p>
+            </div>
+            <button type="button" class="btn btn-success btn-lg" data-toggle="collapse" data-target="#demo">Get Started</button>
+        </div>
+
+        <aside class="landing-aside">
+             <div id="demo" class="collapse" >
+                    <form class="login-form">
+                            <h3>Create an account</h3>
+                            <div class="form-group">
+                                <label for="firstname">First Name:</label>
+                                <input type="text" id="firstname" class="form-control" placeholder="First name">
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="lastname">Last Name:</label>
+                                <input type="text" id="lastname" class="form-control" placeholder="Last name">
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="useremail">Email Address:</label>
+                                <input type="email" id="useremail" class="form-control" placeholder="someone@examle.com">
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="userpasswrd">Password:</label>
+                                <input type="password" id="userpasswrd" class="form-control" placeholder="Set a password">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-md" id="login-btn">Submit</button>
+                    </form>
+             </div>
+        </aside>
+        
     
 </body>
 </html>
