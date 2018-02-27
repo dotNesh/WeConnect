@@ -12,8 +12,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
-
-    <body id="login">
+    <body id="regiasterbiz">
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
                     <a class="navbar-brand" href="">WeConnect</a>
                     <ul class="navbar-nav">
@@ -26,26 +25,37 @@
                         <li class="nav-item">
                           <a class="nav-link" href="#">Contacts</a>
                         </li>
+                        <li class="nav-item">
+                          <button class="btn btn-primary">Log Out</button>  
+                        </li>
                     </ul>
             </nav>
+
             <div class="wrap">
-              <h2>Log into WeConnect</h2>
-              <form action="#" class="login-form"> 
-                  <div class="form-group login">
-                      <label for="useremail">Email Address:</label>
-                      <input type="email" id="useremail" class="form-control " placeholder="someone@examle.com">
+              <h2>Register a Business</h2>
+              <form action="#" class="register-form"> 
+                  <div class="form-group register">
+                      <label for="bizname">Business name:</label>
+                      <input type="text" id="bizname" class="form-control " placeholder="Business name">
+                  </div>
+
+                  <div class="form-group register">
+                        <label for="bizcategory">Category:</label>
+                        <input type="text" id="bizcategory" class="form-control " placeholder="Category">
                   </div>
   
-                  <div class="form-group login">
-                      <label for="userpasswrd">Password:</label>
-                      <input type="password" id="userpasswrd" class="form-control" placeholder="password">
+                  <div class="form-group register">
+                      <label for="bizlocation">Location:</label>
+                      <input type="text" id="bizlocation" class="form-control" placeholder="Location">
                   </div>
 
-                  <button type="submit" class="btn btn-primary btn-block">log in</button>
+                  <div class=" form-group register">
+                       <label for="bizlocation">Description:</label>
+                       <textarea class="form-control" rows="7" id="bizlocation" placeholder="Describe your business"></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-block">Register Business</button>
               </form>
-
-              <p>Do you have an account? Sign up<a href="index.html"> here.</a></p>
-
             </div>
-    </body>
-</html>    
+   </body>
+</html>   

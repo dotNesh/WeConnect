@@ -7,7 +7,7 @@
 }
 .wrap{
     margin: auto;
-    padding-top: 50px;
+    padding-top: 30px;
     width:600px;
     background-color: white;
 }
@@ -57,6 +57,9 @@ h3{
 .form-group.login{
     width: 100%;
 }
+.form-group.register{
+    width: 100%;
+}
 p{
     padding-top: 10px;
     text-align: center;
@@ -65,4 +68,7 @@ h2{
     text-align: center;
     text-decoration: black;
     font-family:sans-serif;
+}
+.btn.btn-primary.btn-block{
+    padding-left: 10px;
 }
