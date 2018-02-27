@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>WeConnect - Log in</title>
+        <title>WeConnect - Business Registration</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--My Custom styles-->
         <link rel="stylesheet" type="text/css" href="styles/styles.css" />
@@ -41,7 +41,11 @@
 
                   <div class="form-group register">
                         <label for="bizcategory">Category:</label>
-                        <input type="text" id="bizcategory" class="form-control " placeholder="Category">
+                        <select id="bizcategory" name="category">
+                                <option value="Retail">Retail</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Housing">Housing</option>
+                        </select>
                   </div>
   
                   <div class="form-group register">
@@ -50,8 +54,8 @@
                   </div>
 
                   <div class=" form-group register">
-                       <label for="bizlocation">Description:</label>
-                       <textarea class="form-control" rows="7" id="bizlocation" placeholder="Describe your business"></textarea>
+                       <label for="bizdescription">Description:</label>
+                       <textarea class="form-control" rows="7" id="bizdescription" placeholder="Describe your business"></textarea>
                   </div>
 
                   <button type="submit" class="btn btn-primary btn-block">Register Business</button>

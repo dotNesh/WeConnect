@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Business - Post a review</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--My Custom styles-->
+        <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+        <!--Bootstrap styles-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </head>
+    <body id="post-review">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                    <a class="navbar-brand" href="">WeConnect</a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">About us</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Catalog</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Contacts</a>
+                        </li>
+                        <li class="nav-item">
+                          <button class="btn btn-primary">Log Out</button>  
+                        </li>
+                    </ul>
+            </nav>
+            <div class="wrap">
+                    <h2>Review a Business</h2>
+                    <form action="#" class="review-form"> 
+                        <div class="form-group review">
+                            <label for="bizname">Business name:</label>
+                            <input type="text" id="bizname" class="form-control " placeholder="Business name" disabled>
+                        </div>
+
+                        <div class=" form-group review">
+                            <label for="bizdecription">Description:</label>
+                            <textarea class="form-control" rows="3" id="bizdescription" placeholder="I sell Mutura outside Thika Road Mall" disabled></textarea>
+                        </div>
+        
+                        <div class="form-group review">
+                            <label for="reviewtitle">Title:</label>
+                            <input type="text" id="reviewtitle" class="form-control" placeholder="Title">
+                        </div>
+      
+                        <div class=" form-group review">
+                             <label for="reviewdesc">Review:</label>
+                             <textarea class="form-control" rows="4" id="reviewdesc" placeholder="Write your review"></textarea>
+                        </div>
+      
+                        <button type="submit" class="btn btn-primary btn-block">Post review</button>
+                    </form>
+                </div>
+
+    </body>
+</html>    

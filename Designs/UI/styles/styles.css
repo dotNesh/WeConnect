@@ -1,5 +1,5 @@
 #index{
-    background-image: url("../img/home23.jpg");
+    background-image: url("../images/home23.jpg");
     height: 500px;
     background-position: center;
     background-repeat: no-repeat;
@@ -30,8 +30,7 @@
 .landing-page-detail{
     width: 50%;
     height: 70%;
-    padding-top: 85px;
-    padding-left: 50px;
+    padding-top: 70px;
     float: left;
 }
 .form-group{
@@ -60,7 +59,15 @@ h3{
 .form-group.register{
     width: 100%;
 }
+.form-group.review{
+    width: 100%;
+}
+select{
+    width: 100%;
+    height: 35px;
+}
 p{
+
     padding-top: 10px;
     text-align: center;
 }
