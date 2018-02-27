@@ -27,10 +27,6 @@ body {
     padding-left: 50px;
     float: left;
 }
-.landing-aside{
-    float: right;
-    width:30%;
-}
 
 .form-group{
     width: 300px;
@@ -39,12 +35,16 @@ body {
     
 }
 .login-form{
+    border-radius: 5px;
     color: rgb(8, 8, 8);
 }
 h3{
     padding: 5%; 
 }
 #demo{
-    width: 75%;
+    opacity: 1;
+    float: right;
+    width: 315px;
+    border-radius: 5px;        
     background-color: white;
 }
