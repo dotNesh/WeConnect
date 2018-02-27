@@ -13,7 +13,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 
-<body>
+<body id="index">
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <a class="navbar-brand" href="#">WeConnect</a>
             <ul class="navbar-nav">
@@ -48,8 +48,8 @@
                 </div>
 
                 <aside id="demo" class="collapse" >
-                            <form class="login-form">
-                                    <h3>Create an account</h3>
+                            <h3>Create an account</h3>
+                            <form action="#" class="signin-form">
                                     <div class="form-group">
                                         <label for="firstname">First Name:</label>
                                         <input type="text" id="firstname" class="form-control" placeholder="First name">
@@ -70,8 +70,9 @@
                                         <input type="password" id="userpasswrd" class="form-control" placeholder="Set a password">
                                     </div>
                                     
-                                    <button type="submit" class="btn btn-primary btn-md" id="login-btn">Submit</button>
+                                    <button type="submit" class="btn btn-primary btn-block" id="login-btn">Submit</button>
                             </form>
+                            <p>Already have an account? <a href="login.html">Login here.</a></p>
                 </aside>
              </div>                   
           </div>
