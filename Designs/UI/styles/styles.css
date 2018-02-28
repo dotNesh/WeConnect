@@ -31,7 +31,13 @@
 .reviewcontent{
   float: right;
   width: 48%;
-  padding-right: 20px
+  padding-right: 20px;
+}
+.updatecontent{
+  float: right;
+  width: 48%;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .search{
@@ -48,7 +54,7 @@
     margin: auto;
 }
 .navbar-nav{
-    margin-left: 700px;
+    margin-left: 600px;
     color: cornsilk
 }
 .nav-item{
@@ -92,6 +98,9 @@ h3{
 .form-group.register{
     width: 100%;
 }
+.form-group.update{
+    width: 100%;
+}
 .form-group.review{
     width: 100%;
 }
@@ -127,5 +136,14 @@ h2{
     padding-bottom: 30px;
 }
 .lbl{
-    padding-top: 50px;
+    padding-top: 30px;
+}
+.update-form{
+    padding-bottom: 50px;
+}
+h6{
+    padding-left: 10px;
+}
+.btn.btn-primary.update{
+    width: 90%;
 }
