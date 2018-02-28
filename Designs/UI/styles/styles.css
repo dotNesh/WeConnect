@@ -17,6 +17,23 @@
     width:900px;
     background-color: white;
 }
+.wrap.profile{
+    margin: auto;
+    padding-top: 20px;
+    width:700px;
+    background-color: white;
+}
+.card{
+    width: 50%;
+    float: left;
+}
+
+.reviewcontent{
+  float: right;
+  width: 48%;
+  padding-right: 20px
+}
+
 .search{
    float: left;
    width:35%;
@@ -100,4 +117,15 @@ h2{
 }
 .list-group{
     padding-bottom: 20px;
+}
+#mutura{
+    width: 100%;
+    height: 10%;
+}
+.card.review{
+    width:100%;
+    padding-bottom: 30px;
+}
+.lbl{
+    padding-top: 50px;
 }
