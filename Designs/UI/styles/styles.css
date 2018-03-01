@@ -100,12 +100,19 @@ h3{
 }
 .form-group.update{
     width: 100%;
+    padding-left: 0px;
 }
 .form-group.review{
     width: 100%;
 }
+
+.form-group.delete{
+    width: 90%;
+    padding-left: 0px;
+}
 .form-group.catalog{
     padding-top: 10px;
+    padding-left: 0px;
 }
 select{
     width: 100%;
