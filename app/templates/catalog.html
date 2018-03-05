@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Business - Catalog</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!--My Custom styles-->
+        <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+
+        <!--Bootstrap styles-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </head>
+    <body id="catalog">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                    <a class="navbar-brand" href="index.html">WeConnect</a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link" href="about.html">Why WeConnect?</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#">Catalog</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Contacts</a>
+                        </li>
+                        <li class="nav-item">
+                          <button class="btn btn-primary">Log Out</button>  
+                        </li>
+                    </ul>
+            </nav>
+
+           <div class="wrap catalog">
+                <div class ="search">
+                    <form  class= "form-inline"action="#">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                            <button class="btn btn-success" type="submit">Search</button>
+
+                        <div class="form-group catalog">
+                            <label for="bizcategory">Category:</label>
+                            <select id="bizcategory" name="category">
+                                    <option value="Retail">Retail</option>
+                                    <option value="Hotel">Hotel</option>
+                                    <option value="Housing">Housing</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group catalog">
+                            <label for="bizlocation">Location:</label>
+                            <select id="bizlocation" name="location">
+                                    <option value="Nairobi">Nairobi</option>
+                                    <option value="Kisumu">Kisumu</option>
+                                    <option value="Mombasa">Mombasa</option>
+                            </select>
+                        </div>
+    
+
+                    </form>
+                </div>
+                <aside class="content">
+                    <div class="list-group">
+                        <a href="profilebiz.html" class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between">
+                            <h5>Mutura kwa Maiko</h5>
+                            <small>3 days ago</small>
+                        </div>
+                            <p>Come and enjoy the best Mutura north of limpopo and south of the sahara desert.It's sizzling hot and most importantly tasty..</p>
+                            <small>Owned by Peter Kamau</small>
+                        </a>
+
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between">
+                                <h5>Mama Omosh Salon</h5>
+                                <small>5 days ago</small>
+                            </div>
+                                <p>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                <small>Owned by Mary Orwa</small>
+                        </a>
+
+                        <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between">
+                                    <h5>Nina Consultants</h5>
+                                    <small>8 days ago</small>
+                                </div>
+                                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                    <small>Owned by Muthiora Shinina</small>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between">
+                                    <h5>Mwenda's Hardware</h5>
+                                    <small>5 days ago</small>
+                                </div>
+                                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                    <small>Owned by Mwenda Ronny</small>
+                        </a>
+                    </div>
+                </aside>
+           </div>
+    </body>
+    </html>        
