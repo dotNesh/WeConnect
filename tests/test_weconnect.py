@@ -1,5 +1,7 @@
 import unittest
+import json
 from app.models import User, Business, Reviews
+from app import app
 
 class UserTestcase(unittest.TestCase):
     def setUp(self):
@@ -56,6 +58,18 @@ class ReivewsTestcase(unittest.TestCase):
         self.assertIsInstance(self.post, Reviews)  
         self.assertEqual(len(self.post.reviews),1)
         self.assertEqual(self.post.review_id,1)  
+
+class UserendpointsTestcase(unittest.TestCase):
+
+    def test_user_register(self):
+        self.app = app.test_client(self)
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="nina@live",username="nina",
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 201)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"User Succesfully Registered")
 
 if __name__ == '__main__':
     unittest.main()        
