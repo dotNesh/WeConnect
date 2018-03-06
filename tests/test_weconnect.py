@@ -61,8 +61,14 @@ class ReivewsTestcase(unittest.TestCase):
 
 class UserendpointsTestcase(unittest.TestCase):
 
-    def test_user_register(self):
+    def setUp(self):
         self.app = app.test_client(self)
+        self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="kelvin@live",username="kelvin",
+                                password="12345678")), content_type="application/json")
+      
+
+    def test_user_register(self):
         response = self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="nina@live",username="nina",
                                 password="12345678")), content_type="application/json")
@@ -70,6 +76,15 @@ class UserendpointsTestcase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"User Succesfully Registered")
+
+    def test_already_registered  (self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="kelvin@live",username="kelvin",
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 404)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Account is already existing.")
 
 if __name__ == '__main__':
     unittest.main()        
