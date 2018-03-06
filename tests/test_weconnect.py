@@ -85,7 +85,7 @@ class UserendpointsTestcase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"Account is already existing.")
-
+        
     def test_user_login(self):
         response = self.app.post("/api/v1/auth/login",
                         data=json.dumps(dict(username="kelvin",password="12345678")),
@@ -110,7 +110,7 @@ class UserendpointsTestcase(unittest.TestCase):
                                          content_type="application/json")
         self.assertEqual(response.status_code, 404)
         response_msg = json.loads(response.data.decode("UTF-8"))
-        self.assertEqual(response_msg["message"],"Non-existent user. Try signing up")   
+        self.assertEqual(response_msg["message"],"Non-existent user. Try signing up") 
 
 if __name__ == '__main__':
     unittest.main()        
