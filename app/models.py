@@ -1,3 +1,5 @@
+from werkzeug.security import generate_password_hash
+
 class User:
 
     #Class Variables
@@ -8,7 +10,7 @@ class User:
         #Class Constructor
         self.email = email
         self.username = username
-        self.password = password
+        self.password = generate_password_hash(password)
 
     def create_user(self):
         #Every call to this call updates the users dictionary
