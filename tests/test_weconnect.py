@@ -86,6 +86,32 @@ class UserendpointsTestcase(unittest.TestCase):
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"Account is already existing.")
 
+    def test_user_login(self):
+        response = self.app.post("/api/v1/auth/login",
+                        data=json.dumps(dict(username="kelvin",password="12345678")),
+                                         content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"You are logged in successfully")
+        self.assertTrue(response_msg['access_token'])
+
+    def test_wrong_password(self):
+        response = self.app.post("/api/v1/auth/login",
+                        data=json.dumps(dict(username="kelvin",password="123678")),
+                                         content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Wrong password") 
+
+    def test_non_existing_user(self):
+        response = self.app.post("/api/v1/auth/login",
+                        data=json.dumps(dict(username="melvin",password="12345678")),
+                                         content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Non-existent user. Try signing up")   
+
 if __name__ == '__main__':
     unittest.main()        
         
