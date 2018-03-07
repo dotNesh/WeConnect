@@ -51,3 +51,22 @@ def login():
             return jsonify({'message': 'Wrong password'}), 400
     else:
         return jsonify({'message': 'Non-existent user. Try signing up'}), 404    
+
+@app.route('/api/v1/businesses',methods=['POST','GET']) 
+@jwt_required
+def register_business():
+    if request.method == 'POST':          
+        current_user = get_jwt_identity()
+        biz_data = request.get_json()
+
+        new_biz = Business(business_name = biz_data['business_name'], category = biz_data['category'], location = biz_data['location'], description = biz_data['description'])
+        new_biz.register_business()
+
+        response = {
+                    'message': 'Business Successfully Registered',
+                    'Registered by': current_user
+                    }
+        return make_response(jsonify(response)), 201
+    
+    businesses = Business.get_all_businesses() 
+    return make_response(jsonify(businesses)), 200        

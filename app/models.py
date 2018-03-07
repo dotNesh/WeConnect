@@ -25,10 +25,7 @@ class User:
         })
         
         return self.users
-    
-    def login(self, email, password):
-        self.email = email
-        self.password = password
+
         
 class Business:
 
@@ -56,6 +53,11 @@ class Business:
          })    
 
          return self.business
+
+     
+     @staticmethod
+     def get_all_businesses():
+        return Business.business    
 
 class Reviews:
     #Class variables
