@@ -58,7 +58,7 @@ def register_business():
     if request.method == 'POST':          
         current_user = get_jwt_identity()
         biz_data = request.get_json()
-
+        
         new_biz = Business(business_name = biz_data['business_name'], category = biz_data['category'], location = biz_data['location'], description = biz_data['description'])
         new_biz.register_business()
 

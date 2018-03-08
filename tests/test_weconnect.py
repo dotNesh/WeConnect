@@ -77,7 +77,35 @@ class UserendpointsTestcase(unittest.TestCase):
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"User Succesfully Registered")
 
-    def test_already_registered  (self):
+    def test_email_not_empty(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="",username="nina",
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Email should not be an empty string")
+
+    def test_username_not_empty(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="nina@live",username="",
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Username should not be an empty string") 
+
+    def test_password_not_empty(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="nina@live.com",username="nina",
+                                password="")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Password should not be an empty string")       
+
+
+    def test_already_registered(self):
         response = self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="kelvin@live",username="kelvin",
                                 password="12345678")), content_type="application/json")
@@ -111,7 +139,7 @@ class UserendpointsTestcase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"Non-existent user. Try signing up") 
-        
+
 class BusinessendpointsTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client(self)
