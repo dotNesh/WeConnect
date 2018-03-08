@@ -92,7 +92,12 @@ def register_business():
                         'Registered by': current_user
                         }
             return make_response(jsonify(response)), 201
-            
-    #If GET
+
+    #If GET method
     businesses = Business.get_all_businesses() 
-    return make_response(jsonify(businesses)), 200        
+    return make_response(jsonify(businesses)), 200  
+
+
+
+
+      
