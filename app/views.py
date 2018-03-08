@@ -17,13 +17,13 @@ def register_user():
     password = user_data.get('password')
     
     if email == "": 
-        return jsonify({'message':'Email should not be an empty string'})
+        return jsonify({'message':'Email should not be an empty string'}), 406
 
     elif username == "":
-        return jsonify({'message':'Username should not be an empty string'})
+        return jsonify({'message':'Username should not be an empty string'}), 406
     
     elif password == "":
-        return jsonify({'message':'Password should not be an empty string'})
+        return jsonify({'message':'Password should not be an empty string'}), 406
 
     else:
         person = User.users.items()
