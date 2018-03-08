@@ -147,7 +147,10 @@ def reviews(business_id):
                     'Review by': current_user
                       }
         return make_response(jsonify(response)), 201   
-    
+        
+    reviews = Reviews.get_all_reviews() 
+    return make_response(jsonify(reviews)), 200       
+
 
 
 

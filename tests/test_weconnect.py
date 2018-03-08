@@ -321,6 +321,14 @@ class ReviewendpointsTestCase(unittest.TestCase):
 
        self.assertEqual(response.status_code, 201)     
 
+    def test_get_reviews(self):
+        response = self.app.get("/api/v1/businesses/2/reviews",
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+        self.assertEqual(response.status_code, 200)                        
 
 
 if __name__ == '__main__':
