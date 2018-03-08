@@ -63,7 +63,7 @@ def login():
     else:
         return jsonify({'message': 'Non-existent user. Try signing up'}), 404    
 
-@app.route('/api/v1/businesses',methods=['POST','GET']) 
+@app.route('/api/v1/businesses',methods=['POST']) 
 @jwt_required
 def register_business():
     if request.method == 'POST':          
@@ -93,7 +93,8 @@ def register_business():
                         }
             return make_response(jsonify(response)), 201
 
-    #If GET method
+@app.route('/api/v1/businesses',methods=['GET']) 
+def get_businesses():
     businesses = Business.get_all_businesses() 
     return make_response(jsonify(businesses)), 200  
 
