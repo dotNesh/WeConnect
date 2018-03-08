@@ -130,7 +130,24 @@ def one_business(business_id):
             return jsonify({'message':'You cannot delete a business that is not yours'}) 
 
 
+@app.route('/api/v1/businesses/<int:business_id>/reviews',methods=['GET','POST'])   
+@jwt_required
+def reviews(business_id):
+    current_user = get_jwt_identity()
+    if request.method == 'POST':
+        review_data = request.get_json()
+        title = review_data.get('title')
+        description = review_data.get('description') 
 
+        new_review = Reviews(title, description)
+        new_review.add_reviews()
+   
+        response = {
+                    'message': 'Review Posted',
+                    'Review by': current_user
+                      }
+        return make_response(jsonify(response)), 201   
+    
 
 
 

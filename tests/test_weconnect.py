@@ -293,6 +293,35 @@ class BusinessendpointsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
 
+class ReviewendpointsTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client(self)
+
+        self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="kelvin@live",username="kelvin",
+                                password="12345678")), content_type="application/json")
+
+        
+        self.login_user = self.app.post("/api/v1/auth/login",
+                        data=json.dumps(dict(username="kelvin",password="12345678")),
+                                         content_type="application/json") 
+      
+        self.access_token = json.loads(self.login_user.data.decode())['access_token']       
+    
+    def test_add_review(self):
+       response = self.app.post("/api/v1/businesses/2/reviews",
+                                data=json.dumps(dict(
+                                    title="Andela",
+                                    description="This is Andela")
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+       self.assertEqual(response.status_code, 201)     
+
+
 
 if __name__ == '__main__':
     unittest.main()
