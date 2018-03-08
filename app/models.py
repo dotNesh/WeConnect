@@ -57,7 +57,14 @@ class Business:
      
      @staticmethod
      def get_all_businesses():
-        return Business.business    
+        return Business.business 
+
+     @staticmethod   
+     def get_business(business_id):
+         biz = Business.business
+         for key in biz:
+             if key == business_id:
+                 return biz[key]   
 
 class Reviews:
     #Class variables
@@ -81,5 +88,5 @@ class Reviews:
          return  self.reviews
 
 
-         
+
 

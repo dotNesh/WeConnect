@@ -261,18 +261,27 @@ class BusinessendpointsTestCase(unittest.TestCase):
     
 
 
-    def test_get_business(self):
+    def test_get_businesses(self):
          response = self.app.get("/api/v1/businesses",
                                     headers = {
                                     "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
                                     })
-         self.assertEqual(response.status_code, 200)        
+         self.assertEqual(response.status_code, 200)   
+
+    def test_get_business(self):
+
+        response = self.app.get("/api/v1/businesses/1",
+                                    headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                    })
+        self.assertEqual(response.status_code, 200)            
 
 if __name__ == '__main__':
     unittest.main()
     
 
-    
+
         
 

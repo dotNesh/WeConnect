@@ -95,9 +95,17 @@ def register_business():
 
     #If GET method
     businesses = Business.get_all_businesses() 
-    return make_response(jsonify(businesses)), 200  
+    return make_response(jsonify(businesses)), 200 
+
+
+@app.route('/api/v1/businesses/<int:business_id>', methods=['PUT','GET','DELETE'])
+@jwt_required
+def one_business(business_id):
+    if request.method == 'GET':
+        getbusiness = Business.get_business(business_id)
+        return make_response(jsonify(getbusiness)) , 200
 
 
 
 
-      
+
