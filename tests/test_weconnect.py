@@ -153,9 +153,10 @@ class BusinessendpointsTestCase(unittest.TestCase):
                         data=json.dumps(dict(username="kelvin",password="12345678")),
                                          content_type="application/json") 
       
+        self.access_token = json.loads(self.login_user.data.decode())['access_token']
 
     def test_add_business(self):
-        access_token = json.loads(self.login_user.data.decode())['access_token']
+       
 
         response = self.app.post("/api/v1/businesses",
                                 data=json.dumps(dict(
@@ -165,7 +166,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
                                     description="This is Andela")
                                 ),
                                 headers = {
-                                    "Authorization": "Bearer {}".format(access_token),
+                                    "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
                                 })
                        
@@ -175,12 +176,96 @@ class BusinessendpointsTestCase(unittest.TestCase):
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"Business Successfully Registered") 
 
+    def test_unauthorized_if_no_token_passed(self):
+        response = self.app.post("/api/v1/businesses",
+                                data=json.dumps(dict(
+                                    business_name="Andela",
+                                    category="software",
+                                    location="Nairobi",
+                                    description="This is Andela")
+                                ),
+                                headers = {
+                                    "Content-Type": "application/json"
+                                })
+        self.assertEqual(response.status_code, 401)
+      
+
+    def test_business_name_empty(self):
+        response = self.app.post("/api/v1/businesses",
+                                data=json.dumps(dict(
+                                    business_name="",
+                                    category="software",
+                                    location="Nairobi",
+                                    description="This is Andela")
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Business name should not be an empty string")
+
+    def test_category_empty(self):
+        response = self.app.post("/api/v1/businesses",
+                                data=json.dumps(dict(
+                                    business_name="Andela",
+                                    category="",
+                                    location="Nairobi",
+                                    description="This is Andela")
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Category should not be an empty string")
+
+    def test_location_empty(self):
+        response = self.app.post("/api/v1/businesses",
+                                data=json.dumps(dict(
+                                    business_name="Andela",
+                                    category="software",
+                                    location="",
+                                    description="This is Andela")
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Location should not be an empty string")
+
+    def test_description_empty(self):
+        response = self.app.post("/api/v1/businesses",
+                                data=json.dumps(dict(
+                                    business_name="Andela",
+                                    category="software",
+                                    location="Nairobi",
+                                    description="")
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Description should not be an empty string")
+    
+    
+
+
     def test_get_business(self):
-         access_token = json.loads(self.login_user.data.decode())['access_token']
 
          response = self.app.get("/api/v1/businesses",
                                     headers = {
-                                    "Authorization": "Bearer {}".format(access_token),
+                                    "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
                                     })
          self.assertEqual(response.status_code, 200)        

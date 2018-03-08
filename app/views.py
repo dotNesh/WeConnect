@@ -15,25 +15,36 @@ def register_user():
     email = user_data.get('email')
     username = user_data.get('username')
     password = user_data.get('password')
-
-    person = User.users.items()
-    existing_user = {k:v for k, v in person if user_data['email'] in v['email']}
-    if existing_user:
-        return jsonify({'message': 'Account is already existing.'}), 404
     
-    new_person = User(email, username, password)
-    new_person.create_user()
-    return jsonify({'message':'User Succesfully Registered'}), 201
+    if email == "": 
+        return jsonify({'message':'Email should not be an empty string'}), 406
+
+    elif username == "":
+        return jsonify({'message':'Username should not be an empty string'}), 406
+    
+    elif password == "":
+        return jsonify({'message':'Password should not be an empty string'}), 406
+
+    else:
+        person = User.users.items()
+        existing_user = {k:v for k, v in person if user_data['email'] in v['email']}
+        if existing_user:
+            return jsonify({'message': 'Account is already existing.'}), 404
+        
+        new_person = User(email, username, password)
+        new_person.create_user()
+        return jsonify({'message':'User Succesfully Registered'}), 201
 
 @app.route('/api/v1/auth/login', methods=['POST'])   
 def login():
     
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
- 
+
     login_data = request.get_json()
     username = login_data.get('username')
     password = login_data.get('password')
+    
 
     person = User.users.items()
     existing_user = {k:v for k, v in person if login_data['username'] in v['username']}
@@ -59,14 +70,29 @@ def register_business():
         current_user = get_jwt_identity()
         biz_data = request.get_json()
         
-        new_biz = Business(business_name = biz_data['business_name'], category = biz_data['category'], location = biz_data['location'], description = biz_data['description'])
-        new_biz.register_business()
+        business_name = biz_data.get('business_name')
+        category = biz_data.get('category')
+        location = biz_data.get('location')
+        description = biz_data.get('description')
 
-        response = {
-                    'message': 'Business Successfully Registered',
-                    'Registered by': current_user
-                    }
-        return make_response(jsonify(response)), 201
-    
+        if business_name == "":
+            return jsonify({'message':'Business name should not be an empty string'}), 406
+        elif category == "":
+            return jsonify({'message':'Category should not be an empty string'}), 406
+        elif location == "":
+            return jsonify({'message':'Location should not be an empty string'}), 406
+        elif description == "":
+            return jsonify({'message':'Description should not be an empty string'}), 406   
+        else:
+            new_biz = Business(business_name, category, location, description)
+            new_biz.register_business()
+
+            response = {
+                        'message': 'Business Successfully Registered',
+                        'Registered by': current_user
+                        }
+            return make_response(jsonify(response)), 201
+            
+    #If GET
     businesses = Business.get_all_businesses() 
     return make_response(jsonify(businesses)), 200        
