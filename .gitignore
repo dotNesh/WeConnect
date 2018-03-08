@@ -1,4 +1,6 @@
-__pycache__
+*__pycache__*
 *.pyc
+tests/__init__.pyc
+tests/__pycache__
 *.pytest_cache
 *.cpython-27-PYTEST.pyc

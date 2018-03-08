@@ -57,7 +57,7 @@ class Business:
      
      @staticmethod
      def get_all_businesses():
-        return Business.business    
+        return Business.business       
 
 class Reviews:
     #Class variables
