@@ -27,13 +27,19 @@ def register_user():
 
     else:
         person = User.users.items()
-        existing_user = {k:v for k, v in person if user_data['email'] in v['email']}
-        if existing_user:
-            return jsonify({'message': 'Account is already existing.'}), 404
-        
-        new_person = User(email, username, password)
-        new_person.create_user()
-        return jsonify({'message':'User Succesfully Registered'}), 201
+        existing_email = {k:v for k, v in person if user_data['email'] in v['email']}
+
+        existing_username= {k:v for k, v in person if user_data['username'] in v['username']}
+
+        if existing_email:
+            return jsonify({'message': 'Email already existing.'}), 404
+
+        elif existing_username:
+            return jsonify({'message': 'Username already existing.'}), 404
+        else:    
+            new_person = User(email, username, password)
+            new_person.create_user()
+            return jsonify({'message':'User Succesfully Registered'}), 201
 
 @app.route('/api/v1/auth/login', methods=['POST'])   
 def login():
@@ -75,23 +81,30 @@ def register_business():
         location = biz_data.get('location')
         description = biz_data.get('description')
 
-        if business_name == "":
-            return jsonify({'message':'Business name should not be an empty string'}), 406
-        elif category == "":
-            return jsonify({'message':'Category should not be an empty string'}), 406
-        elif location == "":
-            return jsonify({'message':'Location should not be an empty string'}), 406
-        elif description == "":
-            return jsonify({'message':'Description should not be an empty string'}), 406   
-        else:
-            new_biz = Business(business_name, category, location, description)
-            new_biz.register_business()
+        biz = Business.business.items()
+        existing_business = {k:v for k, v in biz if biz_data['business_name'] in v['business_name']}
 
-            response = {
-                        'message': 'Business Successfully Registered',
-                        'Registered by': current_user
-                        }
-            return make_response(jsonify(response)), 201
+        
+        if business_name == "":
+                return jsonify({'message':'Business name should not be an empty string'}), 406
+        elif category == "":
+                return jsonify({'message':'Category should not be an empty string'}), 406
+        elif location == "":
+                return jsonify({'message':'Location should not be an empty string'}), 406
+        elif description == "":
+                return jsonify({'message':'Description should not be an empty string'}), 406  
+        elif existing_business:
+            return jsonify({"message":"Business name already exists"})
+                
+        else:
+                new_biz = Business(business_name, category, location, description, current_user)
+                new_biz.register_business()
+
+                response = {
+                            'message': 'Business Successfully Registered',
+                            'Registered by': current_user
+                            }
+                return make_response(jsonify(response)), 201
 
     #If GET method
     businesses = Business.get_all_businesses() 
@@ -101,9 +114,22 @@ def register_business():
 @app.route('/api/v1/businesses/<int:business_id>', methods=['PUT','GET','DELETE'])
 @jwt_required
 def one_business(business_id):
+
+    current_user = get_jwt_identity() #Current_user is username 
+    print('Current',current_user)
+    targetbusiness = Business.get_business(business_id)
+
     if request.method == 'GET':
-        getbusiness = Business.get_business(business_id)
-        return make_response(jsonify(getbusiness)) , 200
+        return make_response(jsonify(targetbusiness)) , 200
+
+    elif request.method == 'DELETE':
+        if current_user == targetbusiness['username']:
+            deletebusiness = Business.delete_business(business_id)
+            return make_response(jsonify(deletebusiness)), 200 
+        else:
+            return jsonify({'message':'You cannot delete a business that is not yours'}) 
+
+
 
 
 
