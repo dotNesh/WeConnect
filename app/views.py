@@ -128,6 +128,14 @@ def one_business(business_id):
             return make_response(jsonify(deletebusiness)), 200 
         else:
             return jsonify({'message':'You cannot delete a business that is not yours'}) 
+    
+    elif request.method == 'PUT':
+        if current_user == targetbusiness['username']:
+            data = request.get_json()
+            updated_data = Business.update_business(business_id, data)
+            print('data',updated_data)
+            return jsonify({'message':'Successfully Updated'}) 
+             
 
 
 
