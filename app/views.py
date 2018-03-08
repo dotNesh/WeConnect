@@ -116,7 +116,6 @@ def register_business():
 def one_business(business_id):
 
     current_user = get_jwt_identity() #Current_user is username 
-    print('Current',current_user)
     targetbusiness = Business.get_business(business_id)
 
     if request.method == 'GET':
