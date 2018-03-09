@@ -1,12 +1,20 @@
 from flask import Flask, jsonify,request,make_response
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_raw_jwt
 from app.models import User, Business, Reviews
 from werkzeug.security import check_password_hash
 from app import app
 
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECS'] = ['access']
 jwt = JWTManager(app)
+blacklist = set()
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
 
 
 @app.route('/api/v1/auth/register',methods=['POST']) 
@@ -27,9 +35,9 @@ def register_user():
 
     else:
         person = User.users.items()
-        existing_email = {k:v for k, v in person if email in v['email']}
+        existing_email = {k:v for k, v in person if user_data['email'] in v['email']}
 
-        existing_username= {k:v for k, v in person if username in v['username']}
+        existing_username= {k:v for k, v in person if user_data['username'] in v['username']}
 
         if existing_email:
             return jsonify({'message': 'Email already existing.'}), 404
@@ -43,7 +51,6 @@ def register_user():
 
 @app.route('/api/v1/auth/login', methods=['POST'])   
 def login():
-    
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
 
@@ -53,7 +60,7 @@ def login():
     
 
     person = User.users.items()
-    existing_user = {k:v for k, v in person if username in v['username']}
+    existing_user = {k:v for k, v in person if login_data['username'] in v['username']}
     if existing_user:
        valid_user = [v for v in existing_user.values() if check_password_hash(v['password'],password)]
        if valid_user:
@@ -116,7 +123,6 @@ def register_business():
 def one_business(business_id):
 
     current_user = get_jwt_identity() #Current_user is username 
-    print('Current',current_user)
     targetbusiness = Business.get_business(business_id)
 
     if request.method == 'GET':
@@ -128,17 +134,34 @@ def one_business(business_id):
             return make_response(jsonify(deletebusiness)), 200 
         else:
             return jsonify({'message':'You cannot delete a business that is not yours'}) 
-    
-    elif request.method == 'PUT':
-        if current_user == targetbusiness['username']:
-            data = request.get_json()
-            updated_data = Business.update_business(business_id, data)
-            print('data',updated_data)
-            return jsonify({'message':'Successfully Updated'}) 
-             
 
 
+@app.route('/api/v1/businesses/<int:business_id>/reviews',methods=['GET','POST'])   
+@jwt_required
+def reviews(business_id):
+    current_user = get_jwt_identity()
+    if request.method == 'POST':
+        review_data = request.get_json()
+        title = review_data.get('title')
+        description = review_data.get('description') 
 
+        new_review = Reviews(title, description)
+        new_review.add_reviews()
+   
+        response = {
+                    'message': 'Review Posted',
+                    'Review by': current_user
+                      }
+        return make_response(jsonify(response)), 201   
+        
+    reviews = Reviews.get_all_reviews() 
+    return make_response(jsonify(reviews)), 200       
 
+@app.route('/api/v1/auth/logout', methods=['POST'])
+@jwt_required
+def logout():
+    dump = get_raw_jwt()['jti']
+    blacklist.add(dump)
+    return jsonify({'message': 'Logout successful'}), 200
 
 
