@@ -1,0 +1,4 @@
+{
+  "tests/test_weconnect.py::BusinessendpointsTestCase::test_delete_business_not_yours": true, 
+  "tests/test_weconnect.py::BusinessendpointsTestCase::test_update_business": true
+}
