@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>WeConnect - Business Registration</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!--My Custom styles-->
+        <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+        <!--Bootstrap styles-->
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </head>
+    <body id="regiasterbiz">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                    <a class="navbar-brand" href="myprofile.html">WeConnect</a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link" href="about.html">Why WeConnect?</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="catalog.html">Catalog</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Contacts</a>
+                        </li>
+                        <li class="nav-item">
+                          <button class="btn btn-primary">Log Out</button>  
+                        </li>
+                    </ul>
+            </nav>
+
+            <div class="wrap">
+              <h2>Register a Business</h2>
+              <form action="#" class="register-form"> 
+                  <div class="form-group register">
+                      <label for="bizname">Business name:</label>
+                      <input type="text" id="bizname" class="form-control " placeholder="Business name">
+                  </div>
+
+                  <div class="form-group register">
+                        <label for="bizcategory">Category:</label>
+                        <select id="bizcategory" name="category">
+                                <option value="Retail">Retail</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Housing">Housing</option>
+                        </select>
+                  </div>
+  
+                  <div class="form-group register">
+                      <label for="bizlocation">Location:</label>
+                      <input type="text" id="bizlocation" class="form-control" placeholder="Location">
+                  </div>
+
+                  <div class=" form-group register">
+                       <label for="bizdescription">Description:</label>
+                       <textarea class="form-control" rows="7" id="bizdescription" placeholder="Describe your business"></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-block">Register Business</button>
+              </form>
+            </div>
+   </body>
+</html>   
