@@ -13,7 +13,6 @@ class UserTestcase(unittest.TestCase):
         #Test before person is created
         self.assertEqual(len(self.person.users),0)
         self.assertEqual(self.person.user_id,0)
-        print('user', self.person.users)
         
         #After person is created
         self.person.create_user()
@@ -33,7 +32,8 @@ class BusinessTestcase(unittest.TestCase):
     def test_register_business(self):
         #Before registering a business
         self.assertEqual(len(self.bizna.business),0)
-    
+        self.assertEqual(self.bizna.business_id,0) 
+
         #After registering a business   
         self.bizna.register_business()
         self.assertIsInstance(self.bizna, Business)
@@ -51,7 +51,8 @@ class ReivewsTestcase(unittest.TestCase):
     def test_add_reviews(self):
         #Before posting a review
         self.assertEqual(len(self.post.reviews),0)
-       
+        self.assertEqual(self.post.review_id,0)  
+
         #After posting a review
         self.post.add_reviews()
         self.assertIsInstance(self.post, Reviews)  
@@ -291,43 +292,6 @@ class BusinessendpointsTestCase(unittest.TestCase):
                                     })
         self.assertEqual(response.status_code, 200)
         
-
-class ReviewendpointsTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = app.test_client(self)
-
-        self.app.post("/api/v1/auth/register",
-                    data=json.dumps(dict(email="kelvin@live",username="kelvin",
-                                password="12345678")), content_type="application/json")
-
-        
-        self.login_user = self.app.post("/api/v1/auth/login",
-                        data=json.dumps(dict(username="kelvin",password="12345678")),
-                                         content_type="application/json") 
-      
-        self.access_token = json.loads(self.login_user.data.decode())['access_token']       
-    
-    def test_add_review(self):
-       response = self.app.post("/api/v1/businesses/2/reviews",
-                                data=json.dumps(dict(
-                                    title="Andela",
-                                    description="This is Andela")
-                                ),
-                                headers = {
-                                    "Authorization": "Bearer {}".format(self.access_token),
-                                    "Content-Type": "application/json"
-                                })
-
-       self.assertEqual(response.status_code, 201)     
-
-    def test_get_reviews(self):
-        response = self.app.get("/api/v1/businesses/2/reviews",
-                                headers = {
-                                    "Authorization": "Bearer {}".format(self.access_token),
-                                    "Content-Type": "application/json"
-                                })
-
-        self.assertEqual(response.status_code, 200)                        
 
 
 if __name__ == '__main__':
