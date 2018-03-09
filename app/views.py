@@ -27,9 +27,9 @@ def register_user():
 
     else:
         person = User.users.items()
-        existing_email = {k:v for k, v in person if user_data['email'] in v['email']}
+        existing_email = {k:v for k, v in person if email in v['email']}
 
-        existing_username= {k:v for k, v in person if user_data['username'] in v['username']}
+        existing_username= {k:v for k, v in person if username in v['username']}
 
         if existing_email:
             return jsonify({'message': 'Email already existing.'}), 404
@@ -53,7 +53,7 @@ def login():
     
 
     person = User.users.items()
-    existing_user = {k:v for k, v in person if login_data['username'] in v['username']}
+    existing_user = {k:v for k, v in person if username in v['username']}
     if existing_user:
        valid_user = [v for v in existing_user.values() if check_password_hash(v['password'],password)]
        if valid_user:
@@ -136,7 +136,6 @@ def one_business(business_id):
             print('data',updated_data)
             return jsonify({'message':'Successfully Updated'}) 
              
-
 
 
 

@@ -87,10 +87,8 @@ class Business:
      @staticmethod         
      def update_business(business_id, data):
          biz = Business.business
-         print('biz', biz)
          for key in biz:
              if key == business_id:
-                 print('old data', biz[key])
                  if 'category' in data.keys():
                     biz[key]['category'] = data['category']
                  if 'business_name' in data.keys():
