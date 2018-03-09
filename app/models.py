@@ -84,6 +84,23 @@ class Business:
              if key == business_id:
                  return biz[key]
 
+     @staticmethod         
+     def update_business(business_id, data):
+         biz = Business.business
+         for key in biz:
+             if key == business_id:
+                 if 'category' in data.keys():
+                    biz[key]['category'] = data['category']
+                 if 'business_name' in data.keys():
+                    biz[key]['business_name'] = data['business_name']
+                 if 'location' in data.keys():
+                     biz[key]['location'] = data['location']
+                 if 'description' in data.keys():
+                     biz[key]['description'] = data['location']
+
+                 return biz            
+
+
      
              
 
