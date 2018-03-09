@@ -1,27 +1,37 @@
 #index{
+    height: 700px;
     background-image: url("../images/home23.jpg");
-    height: 500px;
+    width:100%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
-.wrap{
+#login{
+    background-color: #e4ebf0;
+
+}
+#regiasterbiz{
+    background-color: #e4ebf0; 
+}
+#post-review{
+    background-color: #e4ebf0;
+}
+
+.wrap.forms{
     margin: auto;
     padding-top: 30px;
+    padding-bottom: 10px;
     width:600px;
     background-color: white;
 }
 .wrap.catalog{
-    margin: auto;
     padding-top: 30px;
-    width:900px;
+    width: 100%;
     background-color: white;
 }
 .wrap.profile{
-    margin: auto;
     padding-top: 20px;
-    width:700px;
-    background-color: white;
+    width: 80%;
 }
 .card{
     width: 50%;
@@ -81,6 +91,9 @@
 .signin-form{
     border-radius: 5px;
     color: rgb(8, 8, 8);
+    padding-top: 20px;
+    padding-bottom: 10px;
+    background-color: white;
 }
 h3{
     padding: 5%; 
@@ -89,14 +102,16 @@ h3{
     opacity: 1;
     float: right;
     width: 315px;
-    border-radius: 5px;        
-    background-color: white;
+    border-radius: 5px;    
+    padding-top: 70px;
 }
 .form-group.login{
     width: 100%;
+    padding-right: 10px;
 }
 .form-group.register{
     width: 100%;
+    padding-right: 10px;
 }
 .form-group.update{
     width: 100%;
@@ -104,6 +119,7 @@ h3{
 }
 .form-group.review{
     width: 100%;
+    padding-right: 10px;
 }
 
 .form-group.delete{
@@ -121,14 +137,15 @@ select{
 p{
 
     padding-top: 10px;
-    text-align: center;
+    padding-left: 10px;
+    text-align: left;
 }
 h2{
     text-align: center;
     text-decoration: black;
     font-family:sans-serif;
 }
-.btn.btn-primary.btn-block{
+.mbtn.btn-primary.btn-block{
     padding-left: 10px;
 }
 .list-group{
@@ -137,10 +154,6 @@ h2{
 #mutura{
     width: 100%;
     height: 10%;
-}
-.card.review{
-    width:100%;
-    padding-bottom: 30px;
 }
 .lbl{
     padding-top: 30px;
@@ -154,4 +167,31 @@ h6{
 
 .btn.btn-primary.update{
     width: 90%;
+}
+.btn.btn-primary.get-started{
+    width: 100%;
+}
+.container.login{
+    padding-top: 30px;
+}
+.container.register{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.container.myprofile{
+    width:70%;
+    margin:auto;
+}
+.container.bizprofile{
+    width:70%;
+    margin:auto;
+}
+.container.catalog{
+    width:70%;
+    margin:auto;
+}
+.container.review{
+    width:70%;
+    padding-top: 30px;
+    margin:auto;
 }

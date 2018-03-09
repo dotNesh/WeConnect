@@ -75,6 +75,37 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_email_not_empty(self):
         response = self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="",username="nina",
+<<<<<<< HEAD
+=======
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Email should not be an empty string")
+
+    def test_username_not_empty(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="nina@live",username="",
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Username should not be an empty string") 
+
+    def test_password_not_empty(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="nina@live.com",username="nina",
+                                password="")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Password should not be an empty string")       
+
+
+    def test_email_already_registered(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="kelvin@live",username="kelin",
+>>>>>>> 9cfbf6e71c70d780a29c69a3f51ca498bfda42f3
                                 password="12345678")), content_type="application/json")
 
         self.assertEqual(response.status_code, 406)
@@ -116,6 +147,18 @@ class UserendpointsTestcase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 409)
         response_msg = json.loads(response.data.decode("UTF-8"))
+<<<<<<< HEAD
+=======
+        self.assertEqual(response_msg["message"],"Email already existing.")
+
+    def test_username_already_registered(self):
+        response = self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="kev@live",username="kelvin",
+                                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 404)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+>>>>>>> 9cfbf6e71c70d780a29c69a3f51ca498bfda42f3
         self.assertEqual(response_msg["message"],"Username already existing.")    
         
     def test_user_login(self):
@@ -285,6 +328,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
                                     "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
                                     })
+<<<<<<< HEAD
         self.assertEqual(response.status_code, 200)  
 
 
@@ -324,6 +368,10 @@ class ReviewendpointsTestCase(unittest.TestCase):
                                 })
 
         self.assertEqual(response.status_code, 200)                        
+=======
+        self.assertEqual(response.status_code, 200)
+        
+>>>>>>> 9cfbf6e71c70d780a29c69a3f51ca498bfda42f3
 
 
 if __name__ == '__main__':

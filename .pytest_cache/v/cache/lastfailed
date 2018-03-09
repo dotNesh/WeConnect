@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {
   "tests/test_weconnect.py::BusinessendpointsTestCase::test_delete_business_not_yours": true, 
   "tests/test_weconnect.py::BusinessendpointsTestCase::test_update_business": true
 }
+=======
+{}
+>>>>>>> 9cfbf6e71c70d780a29c69a3f51ca498bfda42f3
