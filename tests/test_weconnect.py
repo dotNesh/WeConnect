@@ -13,6 +13,7 @@ class UserTestcase(unittest.TestCase):
         #Test before person is created
         self.assertEqual(len(self.person.users),0)
         self.assertEqual(self.person.user_id,0)
+        print('user', self.person.users)
         
         #After person is created
         self.person.create_user()
@@ -32,8 +33,7 @@ class BusinessTestcase(unittest.TestCase):
     def test_register_business(self):
         #Before registering a business
         self.assertEqual(len(self.bizna.business),0)
-        self.assertEqual(self.bizna.business_id,0) 
-
+    
         #After registering a business   
         self.bizna.register_business()
         self.assertIsInstance(self.bizna, Business)
@@ -51,8 +51,7 @@ class ReivewsTestcase(unittest.TestCase):
     def test_add_reviews(self):
         #Before posting a review
         self.assertEqual(len(self.post.reviews),0)
-        self.assertEqual(self.post.review_id,0)  
-
+       
         #After posting a review
         self.post.add_reviews()
         self.assertIsInstance(self.post, Reviews)  
