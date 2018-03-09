@@ -1,12 +1,20 @@
 from flask import Flask, jsonify,request,make_response
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_raw_jwt
 from app.models import User, Business, Reviews
 from werkzeug.security import check_password_hash
 from app import app
 
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECS'] = ['access']
 jwt = JWTManager(app)
+blacklist = set()
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
 
 
 @app.route('/api/v1/auth/register',methods=['POST']) 
@@ -43,7 +51,6 @@ def register_user():
 
 @app.route('/api/v1/auth/login', methods=['POST'])   
 def login():
-    
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
 
@@ -150,7 +157,9 @@ def reviews(business_id):
     reviews = Reviews.get_all_reviews() 
     return make_response(jsonify(reviews)), 200       
 
-
-
-
-
+@app.route('/api/v1/auth/logout', methods=['POST'])
+@jwt_required
+def logout():
+    dump = get_raw_jwt()['jti']
+    blacklist.add(dump)
+    return jsonify({'message': 'Logout successful'}), 200
