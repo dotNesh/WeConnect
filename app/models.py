@@ -1,4 +1,5 @@
 from werkzeug.security import generate_password_hash
+import json
 
 class User:
 
@@ -32,15 +33,16 @@ class User:
         
 class Business:
 
-    #Class Variables
+     #Class Variables
      business_id = 0
      business = {}
 
-     def __init__(self,business_name,category,location,description):
+     def __init__(self,business_name,category,location,description,username):
          self.business_name = business_name
          self.category = category
          self.location = location
          self.description = description
+         self.username = username
 
      def register_business(self):
 
@@ -52,29 +54,82 @@ class Business:
                  'category':self.category,
                  'location':self.location,
                  'description':self.description,
+                 'username':self.username
              }
          })    
 
          return self.business
+     
+     @staticmethod
+     def get_all_businesses():
+        businesses = Business.business
+        if len(businesses) > 0:
+            return businesses
+        else:
+            return {"message":"No businesses.Please add one"}
+
+     @staticmethod
+     def delete_business(business_id):
+        biz = Business.business
+        for key in biz:
+            if key == business_id:
+                del biz[key]
+                return {"message": "Deleted Successfully"}         
+           
+
+     @staticmethod   
+     def get_business(business_id):
+         biz = Business.business
+         for key in biz:
+             if key == business_id:
+                 return biz[key]
+
+     @staticmethod         
+     def update_business(business_id, data):
+         biz = Business.business
+         for key in biz:
+             if key == business_id:
+                 if 'category' in data.keys():
+                    biz[key]['category'] = data['category']
+                 if 'business_name' in data.keys():
+                    biz[key]['business_name'] = data['business_name']
+                 if 'location' in data.keys():
+                     biz[key]['location'] = data['location']
+                 if 'description' in data.keys():
+                     biz[key]['description'] = data['location']
+
+                 return biz            
+
+
+     
+             
 
 class Reviews:
-    #Class variables
-     review_id = 0
-     reviews = {}
+    # Class variables
+    review_id = 0
+    reviews = {}
 
-     def __init__(self,title,description):
-         self.title = title
-         self.description = description
+    def __init__(self,title,description):
+        self.title = title
+        self.description = description
 
-     def add_reviews(self):
-         Reviews.review_id += 1
-         self.reviews.update({
-             self.review_id : {
-                 'user_id': User.user_id,
-                 'business_id':Business.business_id,
-                 'title':self.title,
-                 'description':self.description
-             }
-         })           
-         return  self.reviews
+    def add_reviews(self):
+        Reviews.review_id += 1
+        self.reviews.update({
+            self.review_id : {
+                'user_id': User.user_id,
+                'business_id':Business.business_id,
+                'title':self.title,
+                'description':self.description
+            }
+        })           
+        return  self.reviews
 
+    @staticmethod
+    def get_all_reviews():
+        reviews = Reviews.reviews
+        if len(reviews) > 0:
+            return reviews
+        else:
+            return {"message":"No Reviews for this business.Please add one"}
+    
