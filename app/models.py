@@ -124,18 +124,6 @@ class Reviews:
             }
         })           
         return  self.reviews
-<<<<<<< HEAD
-=======
-
-    @staticmethod
-    def get_all_reviews():
-        reviews = Reviews.reviews
-        if len(reviews) > 0:
-            return reviews
-        else:
-            return {"message":"No Reviews for this business.Please add one"}
-    
->>>>>>> 9cfbf6e71c70d780a29c69a3f51ca498bfda42f3
 
     @staticmethod
     def get_all_reviews():
