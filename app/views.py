@@ -127,24 +127,35 @@ def one_business(business_id):
     targetbusiness = Business.get_business(business_id)
 
     if request.method == 'DELETE':
-        if current_user == targetbusiness['username']:
-            deletebusiness = Business.delete_business(business_id)
-            return make_response(jsonify(deletebusiness)), 200 
+        if targetbusiness:
+            if current_user == targetbusiness['owner']:
+                deletebusiness = Business.delete_business(business_id)
+                return make_response(jsonify(deletebusiness)), 200 
+            else:
+                return jsonify({'message':'You cannot delete a business that is not yours'}), 401 
         else:
-            return jsonify({'message':'You cannot delete a business that is not yours'}) 
+            return jsonify({'message':'Cannot Delete. Resourse Not Found'}), 404
 
+   
     elif request.method == 'PUT':
-        if current_user == targetbusiness['username']:
-            data = request.get_json()
-            updated_data = Business.update_business(business_id, data)
-            return jsonify({'message':'Successfully Updated'}), 201 
-        else:
-             return jsonify({'message':'You cannot update a business that is not yours'}), 401     
+        if targetbusiness:
+            if current_user == targetbusiness['owner']:
+                data = request.get_json()
+                Business.update_business(business_id, data)
+                return jsonify({'message':'Successfully Updated'}), 201 
+            else:
+                return jsonify({'message':'You cannot update a business that is not yours'}), 401  
+        else:          
+            return jsonify({'message':'Cannot Update. Resource Not Found'}), 404       
 
 @app.route('/api/v1/businesses/<int:business_id>', methods=['GET'])   
-def get_a_business(business_id):        
-    targetbusiness = Business.get_business(business_id)
-    return make_response(jsonify(targetbusiness)) , 200 
+def get_a_business(business_id):
+        targetbusiness = Business.get_business(business_id)
+        if targetbusiness:
+            return make_response(jsonify(targetbusiness)) , 200 
+        else:
+            return jsonify({'message':'Resource Not Found'}), 404
+                
 
 
 @app.route('/api/v1/businesses/<int:business_id>/reviews',methods=['POST'])   

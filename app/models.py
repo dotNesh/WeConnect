@@ -54,7 +54,7 @@ class Business:
                  'category':self.category,
                  'location':self.location,
                  'description':self.description,
-                 'username':self.username
+                 'owner':self.username
              }
          })    
 
@@ -81,8 +81,8 @@ class Business:
      def get_business(business_id):
          biz = Business.business
          for key in biz:
-             if key == business_id:
-                 return biz[key]
+                if key == business_id:
+                    return biz[key] 
 
      @staticmethod         
      def update_business(business_id, data):

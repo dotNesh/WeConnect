@@ -1,5 +1,6 @@
 import unittest
 import json
+from flask_jwt_extended import get_jwt_identity
 from app.models import User, Business, Reviews
 from app import app
 
@@ -166,8 +167,6 @@ class BusinessendpointsTestCase(unittest.TestCase):
                     description="This is Andela")
 
     def test_add_business(self):
-       
-
         response = self.app.post("/api/v1/businesses",
                                 data=json.dumps(self.dict),
                                 headers = {
@@ -271,21 +270,20 @@ class BusinessendpointsTestCase(unittest.TestCase):
 
     def test_get_business(self):
 
-        response = self.app.get("/api/v1/businesses/1",
-                                    headers = {
-                                    "Authorization": "Bearer {}".format(self.access_token),
-                                    "Content-Type": "application/json"
-                                    })
+        response = self.app.get("/api/v1/businesses/1")
+        
         self.assertEqual(response.status_code, 200)  
 
     def test_delete_business(self):
-
-        response = self.app.delete("/api/v1/businesses/1",
-                                    headers = {
+            response = self.app.delete("/api/v1/businesses/1",
+                                headers = {
                                     "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
-                                    })
-        self.assertEqual(response.status_code, 200)  
+                                })  
+
+            #self.assertEqual(response.status_code, 200)
+            response_msg = json.loads(response.data.decode("UTF-8")) 
+            self.assertEqual(response_msg["message"],"Description should not be an empty string") 
 
 
 class ReviewendpointsTestCase(unittest.TestCase):

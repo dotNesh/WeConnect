@@ -1,8 +1,3 @@
 {
-  "tests/test_weconnect.py::BusinessTestcase": true, 
-  "tests/test_weconnect.py::BusinessendpointsTestCase": true, 
-  "tests/test_weconnect.py::ReivewsTestcase": true, 
-  "tests/test_weconnect.py::ReviewendpointsTestCase": true, 
-  "tests/test_weconnect.py::UserTestcase": true, 
-  "tests/test_weconnect.py::UserendpointsTestcase": true
+  "tests/test_weconnect.py::BusinessendpointsTestCase::test_delete_business": true
 }
