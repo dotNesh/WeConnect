@@ -275,15 +275,21 @@ class BusinessendpointsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)  
 
     def test_delete_business(self):
+
+            self.app.post("/api/v1/businesses",
+                                data=json.dumps(self.dict),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
             response = self.app.delete("/api/v1/businesses/1",
                                 headers = {
                                     "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
                                 })  
 
-            #self.assertEqual(response.status_code, 200)
-            response_msg = json.loads(response.data.decode("UTF-8")) 
-            self.assertEqual(response_msg["message"],"Description should not be an empty string") 
+            self.assertEqual(response.status_code, 200)
 
 
 class ReviewendpointsTestCase(unittest.TestCase):
