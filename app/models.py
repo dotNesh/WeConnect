@@ -26,10 +26,18 @@ class User:
         })
         
         return self.users
-    
-    def login(self, email, password):
-        self.email = email
-        self.password = password
+    @staticmethod    
+    def reset_password(user_id,data):
+        person = User.users
+        for key in person:
+            if key == user_id:
+                if 'new_password' in data.keys():
+                    passwrd = generate_password_hash(data['new_password']) 
+                    person[key]['password'] = passwrd
+                    print(person[key]['password'])
+                    return person
+                 
+
         
 class Business:
 

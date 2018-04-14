@@ -187,3 +187,23 @@ def logout():
     dump = get_raw_jwt()['jti']
     blacklist.add(dump)
     return jsonify({'message': 'Logout successful'}), 200
+
+@app.route('/api/v1/auth/reset-password', methods=['POST'])
+@jwt_required
+def reset_password():
+    current_user = get_jwt_identity()    
+    data = request.get_json()
+    person = User.users.items()
+    existing_username= {k:v for k, v in person if current_user in v['username']}
+    valid_user = [v for v in existing_username.values() if check_password_hash(v['password'],data['old_password'])]
+    if valid_user:
+        id = existing_username.keys()
+        User.reset_password(id, data)
+        return jsonify({'message': 'Reset successful'}), 200
+    else:
+        return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401
+            
+
+
+
+

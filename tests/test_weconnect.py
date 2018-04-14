@@ -3,58 +3,7 @@ import json
 from flask_jwt_extended import get_jwt_identity
 from app.models import User, Business, Reviews
 from app import app
-
-class UserTestcase(unittest.TestCase):
-    def setUp(self):
-        User.users = {}
-        self.person = User("kmunene@live.com","Kelvin","12345")
-       
-
-    def test_create_user(self):
-        
-        #After person is created
-        self.person.create_user()
-        self.assertIsInstance(self.person, User)
-        self.assertEqual(len(self.person.users),1)
-
-    def tearDown(self):
-        del self.person    
-
-class BusinessTestcase(unittest.TestCase):
-    def setUp(self):
-        Business.business = {}
-        self.bizna = Business("Mutura kwa Maiko", "Restaurant","Kiamaiko","Best Mutura in town","Kelvin")
-
-    def test_register_business(self):
-        #Before registering a business
-        self.assertEqual(len(self.bizna.business),0)
-        self.assertEqual(self.bizna.business_id,0) 
-
-        #After registering a business   
-        self.bizna.register_business()
-        self.assertIsInstance(self.bizna, Business)
-        self.assertEqual(len(self.bizna.business),1)
-        self.assertEqual(self.bizna.business_id, 1)
-
-    def tearDown(self):
-        del self.bizna   
-
-class ReivewsTestcase(unittest.TestCase):
-    def setUp(self):   
-        Reviews.reviews = {}
-        self.post = Reviews("Very Tasy","I really liked the place, its clean, nice ambience, great music") 
-
-    def test_add_reviews(self):
-        #Before posting a review
-        self.assertEqual(len(self.post.reviews),0)
-        self.assertEqual(self.post.review_id,0)  
-
-        #After posting a review
-        self.post.add_reviews()
-        self.assertIsInstance(self.post, Reviews)  
-        self.assertEqual(len(self.post.reviews),1)
-        self.assertEqual(self.post.review_id,1)  
-
+  
 class UserendpointsTestcase(unittest.TestCase):
 
     def setUp(self):
@@ -62,6 +11,16 @@ class UserendpointsTestcase(unittest.TestCase):
         self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="kelvin@live",username="kelvin",
                                 password="12345678")), content_type="application/json")
+
+        self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="ed@live",username="ed",
+                                password="12345678")), content_type="application/json")
+
+        self.login_user2 = self.app.post("/api/v1/auth/login",
+                        data=json.dumps(dict(username="ed",password="12345678")),
+                                         content_type="application/json")                        
+
+        self.access_token2 = json.loads(self.login_user2.data.decode())['access_token']                                                
       
 
     def test_user_register(self):
@@ -124,7 +83,7 @@ class UserendpointsTestcase(unittest.TestCase):
                         data=json.dumps(dict(username="kelvin",password="12345678")),
                                          content_type="application/json")
 
-        self.assertEqual(response.status_code, 200)
+        #self.assertEqual(response.status_code, 200)
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],"You are logged in successfully")
         self.assertTrue(response_msg['access_token'])
@@ -143,7 +102,30 @@ class UserendpointsTestcase(unittest.TestCase):
                                          content_type="application/json")
         self.assertEqual(response.status_code, 404)
         response_msg = json.loads(response.data.decode("UTF-8"))
-        self.assertEqual(response_msg["message"],"Non-existent user. Try signing up") 
+        self.assertEqual(response_msg["message"],"Non-existent user. Try signing up")
+
+    def test_password_reset(self):
+        response = self.app.post("/api/v1/auth/reset-password",
+                        data=json.dumps(dict(old_password="12345678",new_password="12345!@")),
+                                        headers = {
+                                                "Authorization": "Bearer {}".format(self.access_token2),
+                                                "Content-Type": "application/json"
+                                })                                     
+        self.assertEqual(response.status_code, 200)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Reset successful")
+
+    def test_password_reset_wrong_old_password(self):
+        response = self.app.post("/api/v1/auth/reset-password",
+                        data=json.dumps(dict(old_password="12345",new_password="12345!@")),
+                                        headers = {
+                                                "Authorization": "Bearer {}".format(self.access_token2),
+                                                "Content-Type": "application/json"
+                                })                                     
+        self.assertEqual(response.status_code, 401)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Wrong Password. Cannot reset. Forgotten password?")    
+        
 
 class BusinessendpointsTestCase(unittest.TestCase):
     def setUp(self):
@@ -156,9 +138,34 @@ class BusinessendpointsTestCase(unittest.TestCase):
         
         self.login_user = self.app.post("/api/v1/auth/login",
                         data=json.dumps(dict(username="kelvin",password="12345678")),
-                                         content_type="application/json") 
+                                         content_type="application/json")                
       
         self.access_token = json.loads(self.login_user.data.decode())['access_token']
+
+        '''User 2'''
+        self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="lynn@live",username="lynn",
+                                password="12345678")), content_type="application/json")
+
+        
+        self.login_user2 = self.app.post("/api/v1/auth/login",
+                        data=json.dumps(dict(username="lynn",password="12345678")),
+                                         content_type="application/json")                
+      
+        self.access_token2 = json.loads(self.login_user2.data.decode())['access_token']
+
+        '''Business 1'''
+        self.app.post("/api/v1/businesses",
+                                data=json.dumps(dict(
+                                    business_name="Mutura",
+                                    category="food",
+                                    location="Kisumu",
+                                    description="Sweet")
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
 
         self.dict = dict(
                     business_name="Andela",
@@ -272,25 +279,78 @@ class BusinessendpointsTestCase(unittest.TestCase):
 
         response = self.app.get("/api/v1/businesses/1")
         
-        self.assertEqual(response.status_code, 200)  
-
+        self.assertEqual(response.status_code, 200)         
     def test_delete_business(self):
-
-            self.app.post("/api/v1/businesses",
-                                data=json.dumps(self.dict),
-                                headers = {
-                                    "Authorization": "Bearer {}".format(self.access_token),
-                                    "Content-Type": "application/json"
-                                })
-
-            response = self.app.delete("/api/v1/businesses/1",
+            
+            response = self.app.delete("/api/v1/businesses/2",
                                 headers = {
                                     "Authorization": "Bearer {}".format(self.access_token),
                                     "Content-Type": "application/json"
                                 })  
 
             self.assertEqual(response.status_code, 200)
+            response_msg = json.loads(response.data.decode("UTF-8"))
+            self.assertEqual(response_msg["message"],"Deleted Successfully") 
+    def test_delete_business_not_owner(self):
+            
+            response = self.app.delete("/api/v1/businesses/1",
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token2),
+                                    "Content-Type": "application/json"
+                                })  
 
+            self.assertEqual(response.status_code, 401)
+            response_msg = json.loads(response.data.decode("UTF-8"))
+            self.assertEqual(response_msg["message"],"You cannot delete a business that is not yours")
+    def test_delete_business_not_found(self):            
+            response = self.app.delete("/api/v1/businesses/11",
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })  
+
+            self.assertEqual(response.status_code, 404)
+            response_msg = json.loads(response.data.decode("UTF-8"))
+            self.assertEqual(response_msg["message"],"Cannot Delete. Resourse Not Found")   
+    def test_update_business(self):
+        response = self.app.put("/api/v1/businesses/1",
+                                data=json.dumps(dict(
+                                    category="software development",
+                                    location="lagos",)
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+        self.assertEqual(response.status_code, 201) 
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Successfully Updated") 
+    def test_update_business_not_owner(self):
+        response = self.app.put("/api/v1/businesses/1",
+                                data=json.dumps(dict(
+                                    category="software development",
+                                    location="lagos",)
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token2),
+                                    "Content-Type": "application/json"
+                                })
+        self.assertEqual(response.status_code, 401) 
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"You cannot update a business that is not yours")                          
+    def test_update_business_not_found(self):
+        response = self.app.put("/api/v1/businesses/11",
+                                data=json.dumps(dict(
+                                    category="software development",
+                                    location="lagos",)
+                                ),
+                                headers = {
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+        self.assertEqual(response.status_code, 404) 
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],"Cannot Update. Resource Not Found") 
 
 class ReviewendpointsTestCase(unittest.TestCase):
     def setUp(self):
