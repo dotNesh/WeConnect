@@ -1,4 +1,6 @@
-from flask import Flask, jsonify,request,make_response
+'''views,py'''
+from app import validate
+from flask import jsonify, request, make_response
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_raw_jwt
 from app.models import User, Business, Reviews
 from werkzeug.security import check_password_hash
@@ -19,48 +21,47 @@ def check_if_token_in_blacklist(decrypted_token):
 
 @app.route('/api/v1/auth/register',methods=['POST']) 
 def register_user():
-    user_data = request.get_json()
-    email = user_data.get('email')
-    username = user_data.get('username')
-    password = user_data.get('password')
-    
-    if email == "": 
-        return jsonify({'message':'Email should not be an empty string'}), 406
+    data = request.get_json()
+    for key in data:
+        result = validate.empty(data[key])
+        if result:
+            return jsonify({'message': key + ' cannot be an empty string'}), 406
+        else:
+            email = data.get('email')
+            username = data.get('username')
+            password = data.get('password')    
 
-    elif username == "":
-        return jsonify({'message':'Username should not be an empty string'}), 406
-    
-    elif password == "":
-        return jsonify({'message':'Password should not be an empty string'}), 406
+    person = User.users.items()
+    existing_email = {k:v for k, v in person if data['email'] in v['email']}
 
-    else:
-        person = User.users.items()
-        existing_email = {k:v for k, v in person if user_data['email'] in v['email']}
+    existing_username= {k:v for k, v in person if data['username'] in v['username']}
 
-        existing_username= {k:v for k, v in person if user_data['username'] in v['username']}
+    if existing_email:
+        return jsonify({'message': 'Email already existing.'}), 409
 
-        if existing_email:
-            return jsonify({'message': 'Email already existing.'}), 409
-
-        elif existing_username:
-            return jsonify({'message': 'Username already existing.'}), 409
-        else:    
-            new_person = User(email, username, password)
-            new_person.create_user()
-            return jsonify({'message':'User Succesfully Registered'}), 201
+    elif existing_username:
+        return jsonify({'message': 'Username already existing.'}), 409
+    else:    
+        new_person = User(email, username, password)
+        new_person.create_user()
+        return jsonify({'message':'User Succesfully Registered'}), 201
 
 @app.route('/api/v1/auth/login', methods=['POST'])   
 def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
 
-    login_data = request.get_json()
-    username = login_data.get('username')
-    password = login_data.get('password')
+    data = request.get_json()
+    for key in data:
+        result = validate.empty(data[key])
+        if result:
+            return jsonify({'message': key + ' cannot be an empty string'}), 406
+        else:
+            username = data.get('username')
+            password = data.get('password') 
     
-
     person = User.users.items()
-    existing_user = {k:v for k, v in person if login_data['username'] in v['username']}
+    existing_user = {k:v for k, v in person if data['username'] in v['username']}
     if existing_user:
        valid_user = [v for v in existing_user.values() if check_password_hash(v['password'],password)]
        if valid_user:
@@ -78,39 +79,31 @@ def login():
 
 @app.route('/api/v1/businesses',methods=['POST']) 
 @jwt_required
-def register_business():         
-        current_user = get_jwt_identity()
-        biz_data = request.get_json()
-        
-        business_name = biz_data.get('business_name')
-        category = biz_data.get('category')
-        location = biz_data.get('location')
-        description = biz_data.get('description')
-
-        if business_name == "":
-                return jsonify({'message':'Business name should not be an empty string'}), 406
-        elif category == "":
-                return jsonify({'message':'Category should not be an empty string'}), 406
-        elif location == "":
-                return jsonify({'message':'Location should not be an empty string'}), 406
-        elif description == "":
-                return jsonify({'message':'Description should not be an empty string'}), 406  
-
-        biz = Business.business.items()
-        existing_business = {k:v for k, v in biz if biz_data['business_name'] in v['business_name']}
-
-        if existing_business:
-            return jsonify({"message":"Business name already exists"})
-                      
+def register_business():
+    '''Businesss registration route'''
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    for key in data:
+        result = validate.empty(data[key])
+        if result:
+            return jsonify({'message': key + ' cannot be an empty string'}), 406
         else:
-                new_biz = Business(business_name, category, location, description, current_user)
-                new_biz.register_business()
+            business_name = data.get('business_name')
+            category = data.get('category')
+            location = data.get('location')
+            description = data.get('description')
 
-                response = {
-                            'message': 'Business Successfully Registered',
-                            'Registered by': current_user
-                            }
-                return make_response(jsonify(response)), 201
+    biz = Business.business.items()
+    existing_business = {k:v for k, v in biz if data['business_name'] in v['business_name']}
+
+    if existing_business:
+        return jsonify({"message":"Business name already exists"})
+    else:
+        new_biz = Business(business_name, category, location, description, current_user)
+        new_biz.register_business()
+        response = {'message': 'Business Successfully Registered',
+                    'Registered by': current_user}
+        return make_response(jsonify(response)), 201
 
 @app.route('/api/v1/businesses',methods=['GET'])
 def get_businesses():
@@ -192,12 +185,16 @@ def logout():
 def reset_password():
     current_user = get_jwt_identity()    
     data = request.get_json()
+    for key in data:
+        result = validate.empty(data[key])
+        if result:
+            return jsonify({'message': key + ' cannot be an empty string'}), 406
+            
     person = User.users.items()
     existing_username= {k:v for k, v in person if current_user in v['username']}
     valid_user = [v for v in existing_username.values() if check_password_hash(v['password'],data['old_password'])]
     if valid_user:
-        user_id = existing_username.keys()
-        User.reset_password(user_id, data)
+        User.reset_password(current_user , data)
         return jsonify({'message': 'Reset successful'}), 200
     else:
         return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401

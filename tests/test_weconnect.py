@@ -14,6 +14,10 @@ class UserendpointsTestcase(unittest.TestCase):
         self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="ed@live", username="ed",
                         password="12345678")), content_type="application/json")
+
+        self.app.post("/api/v1/auth/register",
+                    data=json.dumps(dict(email="dee@live", username="dee",
+                        password="12345678")), content_type="application/json")                
                 
     def test_user_register(self):
         '''Test User Registration method'''
@@ -130,16 +134,16 @@ class UserendpointsTestcase(unittest.TestCase):
         self.assertEqual(response_msg["message"],"Reset successful")
 
     def test_password_reset_wrong_old_password(self):
-        self.login_user2 = self.app.post("/api/v1/auth/login",
-                    data=json.dumps(dict(username="ed", 
-                        password="12345")),content_type="application/json")                        
+        self.login_user = self.app.post("/api/v1/auth/login",
+                    data=json.dumps(dict(username="dee", 
+                        password="12345678")),content_type="application/json")                        
 
-        self.access_token2 = json.loads(self.login_user2.data.decode())['access_token']
+        self.access_token = json.loads(self.login_user.data.decode())['access_token']
 
         response = self.app.post("/api/v1/auth/reset-password",
                         data=json.dumps(dict(old_password="12345667",new_password="12345!@")),
                                         headers = {
-                                                "Authorization": "Bearer {}".format(self.access_token2),
+                                                "Authorization": "Bearer {}".format(self.access_token),
                                                 "Content-Type": "application/json"
                                 })                                     
         self.assertEqual(response.status_code, 401)
