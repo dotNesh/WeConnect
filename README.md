@@ -1,4 +1,7 @@
 # WeConnect
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/05ca8f3b72874fe493e652c93b375463)](https://app.codacy.com/app/kmunene/WeConnect?utm_source=github.com&utm_medium=referral&utm_content=kmunene/WeConnect&utm_campaign=badger)
+
 WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with. The following project contains User Interface Designs for the platform.
 
 ## Getting Started
