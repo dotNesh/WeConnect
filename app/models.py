@@ -1,4 +1,4 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
 class User:
@@ -27,12 +27,12 @@ class User:
         
         return self.users
     @staticmethod    
-    def reset_password(user_id,data):
+    def reset_password(user_name, data):
         person = User.users
         for key in person:
-            if key == user_id:
+            if person[key]['username'] == user_name:
                 if 'new_password' in data.keys():
-                    person[key]['password'] = generate_password_hash(data['new_password']) 
+                    person[key]['password'] = generate_password_hash(data['new_password'])
                     return person
                  
 
