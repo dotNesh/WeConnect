@@ -1,31 +1,31 @@
+#WeConnect Test File
 import unittest
 import json
-from flask_jwt_extended import get_jwt_identity
-from app.models import User, Business, Reviews
 from app import app
-  
 class UserendpointsTestcase(unittest.TestCase):
+    '''User endpoints test class'''
 
     def setUp(self):
         self.app = app.test_client(self)
         self.app.post("/api/v1/auth/register",
-                    data=json.dumps(dict(email="kelvin@live",username="kelvin",
-                                password="12345678")), content_type="application/json")
+                    data=json.dumps(dict(email="kelvin@live", username="kelvin",
+                        password="12345678")), content_type="application/json")
 
         self.app.post("/api/v1/auth/register",
-                    data=json.dumps(dict(email="ed@live",username="ed",
-                                password="12345678")), content_type="application/json")
+                    data=json.dumps(dict(email="ed@live", username="ed",
+                        password="12345678")), content_type="application/json")
 
         self.login_user2 = self.app.post("/api/v1/auth/login",
-                        data=json.dumps(dict(username="ed",password="12345678")),
-                                         content_type="application/json")                        
+                    data=json.dumps(dict(username="ed", 
+                        password="12345678")),content_type="application/json")                        
 
         self.access_token2 = json.loads(self.login_user2.data.decode())['access_token']                                                
       
 
     def test_user_register(self):
+        '''Test User Registration method'''
         response = self.app.post("/api/v1/auth/register",
-                    data=json.dumps(dict(email="nina@live",username="nina",
+                    data=json.dumps(dict(email="nina@live", username="nina",
                                 password="12345678")), content_type="application/json")
 
         self.assertEqual(response.status_code, 201)
@@ -130,7 +130,7 @@ class UserendpointsTestcase(unittest.TestCase):
 class BusinessendpointsTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client(self)
-
+        #User 1
         self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="kelvin@live",username="kelvin",
                                 password="12345678")), content_type="application/json")
@@ -142,7 +142,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
       
         self.access_token = json.loads(self.login_user.data.decode())['access_token']
 
-        '''User 2'''
+        #User 2
         self.app.post("/api/v1/auth/register",
                     data=json.dumps(dict(email="lynn@live",username="lynn",
                                 password="12345678")), content_type="application/json")
@@ -154,7 +154,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
       
         self.access_token2 = json.loads(self.login_user2.data.decode())['access_token']
 
-        '''Business 1'''
+        #Business 1
         self.app.post("/api/v1/businesses",
                                 data=json.dumps(dict(
                                     business_name="Mutura",

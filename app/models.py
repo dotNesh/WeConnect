@@ -32,9 +32,7 @@ class User:
         for key in person:
             if key == user_id:
                 if 'new_password' in data.keys():
-                    passwrd = generate_password_hash(data['new_password']) 
-                    person[key]['password'] = passwrd
-                    print(person[key]['password'])
+                    person[key]['password'] = generate_password_hash(data['new_password']) 
                     return person
                  
 

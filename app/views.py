@@ -178,8 +178,7 @@ def reviews(business_id):
 
 @app.route('/api/v1/businesses/<int:business_id>/reviews',methods=['GET'])  
 def get_reviews(business_id):      
-    reviews = Reviews.get_all_reviews() 
-    return make_response(jsonify(reviews)), 200       
+    return make_response(jsonify(Reviews.get_all_reviews())), 200       
 
 @app.route('/api/v1/auth/logout', methods=['POST'])
 @jwt_required
@@ -197,8 +196,8 @@ def reset_password():
     existing_username= {k:v for k, v in person if current_user in v['username']}
     valid_user = [v for v in existing_username.values() if check_password_hash(v['password'],data['old_password'])]
     if valid_user:
-        id = existing_username.keys()
-        User.reset_password(id, data)
+        user_id = existing_username.keys()
+        User.reset_password(user_id, data)
         return jsonify({'message': 'Reset successful'}), 200
     else:
         return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401
