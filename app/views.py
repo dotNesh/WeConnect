@@ -46,7 +46,7 @@ def register_user():
         new_person.create_user()
         return jsonify({'message':'User Succesfully Registered'}), 201
 
-@app.route('/api/v1/auth/login', methods=['POST'])   
+@app.route('/api/v1/auth/login', methods=['POST'])
 def login():
     '''Route to login'''
     if not request.is_json:
@@ -60,11 +60,11 @@ def login():
         else:
             username = data.get('username')
             password = data.get('password')
-    
     person = User.users.items()
     existing_user = {k:v for k, v in person if data['username'] in v['username']}
     if existing_user:
-        valid_user = [v for v in existing_user.values() if check_password_hash(v['password'], password)]
+        valid_user = [v for v in existing_user.values()
+                      if check_password_hash(v['password'], password)]
         if valid_user:
             access_token = create_access_token(identity=username)
             if access_token:
@@ -106,7 +106,7 @@ def register_business():
                     'Registered by': current_user}
         return make_response(jsonify(response)), 201
 
-@app.route('/api/v1/businesses',methods=['GET'])
+@app.route('/api/v1/businesses', methods=['GET'])
 def get_businesses():
     '''route to get all businesses'''
     #If GET method
@@ -149,7 +149,7 @@ def get_a_business(business_id):
     else:
         return jsonify({'message':'Resource Not Found'}), 404
 
-@app.route('/api/v1/businesses/<int:business_id>/reviews',methods=['POST'])   
+@app.route('/api/v1/businesses/<int:business_id>/reviews', methods=['POST'])
 @jwt_required
 def reviews(business_id):
     '''Route to post reviews'''
@@ -165,8 +165,7 @@ def reviews(business_id):
             'Review by': current_user
             }
         return make_response(jsonify(response)), 201
-
-@app.route('/api/v1/businesses/<int:business_id>/reviews',methods=['GET'])  
+@app.route('/api/v1/businesses/<int:business_id>/reviews', methods=['GET'])
 def get_reviews(business_id):
     '''Route to add a review'''
     return make_response(jsonify(Reviews.get_all_reviews())), 200
@@ -191,7 +190,8 @@ def reset_password():
             return jsonify({'message': key + ' cannot be an empty string'}), 406
     person = User.users.items()
     existing_username = {k:v for k, v in person if current_user in v['username']}
-    valid_user = [v for v in existing_username.values() if check_password_hash(v['password'], data['old_password'])]
+    valid_user = [v for v in existing_username.values()
+                  if check_password_hash(v['password'], data['old_password'])]
     if valid_user:
         User.reset_password(current_user, data)
         return jsonify({'message': 'Reset successful'}), 200
