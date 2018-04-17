@@ -23,15 +23,19 @@ def check_if_token_in_blacklist(decrypted_token):
 def register_user():
     '''Route to register user'''
     data = request.get_json()
-    for key in data:
-        result = validate.empty(data[key])
-        if result:
-            return jsonify({'message': key + ' cannot be an empty string'}), 406
-        else:
-            email = data.get('email')
-            username = data.get('username')
-            password = data.get('password')
-
+    email = data.get('email')
+    username = data.get('username')
+    password = data.get('password')
+    dict_data = {'email':email, 'username':username, 'password':password}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
+    val_pass = validate.whitespace(dict_data['username'])
+    if val_pass:
+        return jsonify({'message': 'Username cannot contain white spaces'}), 406
     person = User.users.items()
     existing_email = {k:v for k, v in person if data['email'] in v['email']}
     existing_username = {k:v for k, v in person if data['username'] in v['username']}
@@ -53,13 +57,15 @@ def login():
         return jsonify({"msg": "Missing JSON in request"}), 400
 
     data = request.get_json()
-    for key in data:
-        result = validate.empty(data[key])
-        if result:
-            return jsonify({'message': key + ' cannot be an empty string'}), 406
-        else:
-            username = data.get('username')
-            password = data.get('password')
+    username = data.get('username')
+    password = data.get('password')
+    dict_data = {'username':username, 'password':password}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
     person = User.users.items()
     existing_user = {k:v for k, v in person if data['username'] in v['username']}
     if existing_user:
@@ -84,16 +90,18 @@ def register_business():
     '''Businesss registration route'''
     current_user = get_jwt_identity()
     data = request.get_json()
-    for key in data:
-        result = validate.empty(data[key])
-        if result:
-            return jsonify({'message': key + ' cannot be an empty string'}), 406
-        else:
-            business_name = data.get('business_name')
-            category = data.get('category')
-            location = data.get('location')
-            description = data.get('description')
-
+    business_name = data.get('business_name')
+    category = data.get('category')
+    location = data.get('location')
+    description = data.get('description')
+    dict_data = {'business_name':business_name, 'category':category,
+                 'location':location, 'description':description}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
     biz = Business.business.items()
     existing_business = {k:v for k, v in biz if data['business_name'] in v['business_name']}
 
@@ -184,17 +192,22 @@ def reset_password():
     '''Route to reset password'''
     current_user = get_jwt_identity()
     data = request.get_json()
-    for key in data:
-        result = validate.empty(data[key])
-        if result:
-            return jsonify({'message': key + ' cannot be an empty string'}), 406
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+    dict_data = {'old_password':old_password, 'new_password':new_password}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
+
     person = User.users.items()
     existing_username = {k:v for k, v in person if current_user in v['username']}
     valid_user = [v for v in existing_username.values()
-                  if check_password_hash(v['password'], data['old_password'])]
+                  if check_password_hash(v['password'], old_password)]
     if valid_user:
         User.reset_password(current_user, data)
         return jsonify({'message': 'Reset successful'}), 200
     else:
         return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401
-        
