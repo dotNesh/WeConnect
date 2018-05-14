@@ -255,7 +255,8 @@ def reset_password():
                     subject="Password Reset",
                     sender = 'hcravens25@gmail.com',
                     recipients=[existing_username[key]['email']],
-                    body=f"Hello {existing_username[key]['username']},\n Your new password is: {password}")
+                    body="Hello" + existing_username[key]['username'] +",\n Your new password is:" + password
+                    )
             mail.send(message)
             existing_username[key]['password'] = generate_password_hash(password)
         return jsonify({'message': 'An email has been sent with your new password!'}), 200
