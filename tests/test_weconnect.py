@@ -11,10 +11,10 @@ class UserendpointsTestcase(unittest.TestCase):
                                            password="12345678")), content_type="application/json")
 
         self.app.post("/api/v1/auth/register",
-                      data=json.dumps(dict(email="ed@live", username="ed",
+                      data=json.dumps(dict(email="ed@live.com", username="ed",
                                            password="12345678")), content_type="application/json")
         self.app.post("/api/v1/auth/register",
-                      data=json.dumps(dict(email="dee@live", username="dee",
+                      data=json.dumps(dict(email="dee@live.com", username="dee",
                                            password="12345678")), content_type="application/json")
 
         self.user = self.app.post("/api/v1/auth/login",
@@ -33,7 +33,7 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_user_register(self):
         '''Test User Registration method'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="nina@live", username="nina",
+                                 data=json.dumps(dict(email="nina@live.com", username="nina",
                                                       password="12345678")),
                                  content_type="application/json")
 
@@ -44,7 +44,7 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_password_length(self):
         '''Test password length'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="mutha@live", username="mutha",
+                                 data=json.dumps(dict(email="mutha@live.com", username="mutha",
                                                       password="123456")),
                                  content_type="application/json")
 
@@ -62,11 +62,22 @@ class UserendpointsTestcase(unittest.TestCase):
         self.assertEqual(response.status_code, 406)
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg['email-Error:']['message'], "email cannot be an empty string")
+    
+    def test_email_pattern(self):
+        '''Test email pattern'''
+        response = self.app.post("/api/v1/auth/register",
+                                 data=json.dumps(dict(email="jeff@gmail", username="jeff",
+                                                      password="12345678")),
+                                 content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg['message'], "Email format is user@example.com")
 
     def test_username_not_empty(self):
         '''Test for blank username input'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="nina@live", username="",
+                                 data=json.dumps(dict(email="nina@live.com", username="",
                                                       password="12345678")),
                                  content_type="application/json")
 
@@ -126,7 +137,7 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_user_register_whitespace(self):
         '''Test User Registration method'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="nina@live", username="ni na",
+                                 data=json.dumps(dict(email="nina@live.com", username="ni na",
                                                       password="12345678")),
                                  content_type="application/json")
 
@@ -137,7 +148,7 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_email_already_registered(self):
         '''Test for existing email'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="dee@live", username="kelin",
+                                 data=json.dumps(dict(email="dee@live.com", username="kelin",
                                                       password="12345678")),
                                  content_type="application/json")
 
@@ -148,7 +159,7 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_username_exists(self):
         '''test for existing username'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="kev@live", username="kelvin",
+                                 data=json.dumps(dict(email="kev@live.com", username="kelvin",
                                                       password="12345678")),
                                  content_type="application/json")
 
@@ -351,9 +362,39 @@ class UserendpointsTestcase(unittest.TestCase):
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],
                          "Non-existent user. Try signing up")
+    
+    def test_logout(self):
+        '''Test user logout'''
+        response = self.app.post("/api/v1/auth/logout",
+                                headers ={
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+        self.assertEqual(response.status_code,200)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["message"],
+                         "Logout successful")
+    
+    def test_activity_after_loguout(self):
+        '''Test if token is blacklisted'''
+        self.app.post("/api/v1/auth/logout",
+                                headers ={
+                                    "Authorization": "Bearer {}".format(self.access_token),
+                                    "Content-Type": "application/json"
+                                })
+
+        response = self.app.post("/api/v1/businesses",
+                      data=json.dumps(dict(business_name="Waridi", category="food",
+                                           location="Kisumu", description="Sweet")),
+                      headers={
+                          "Authorization": "Bearer {}".format(self.access_token),
+                          "Content-Type": "application/json"
+                          })
         
-
-
+        self.assertEqual(response.status_code, 401)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg["msg"],
+                         "Token has been revoked")
 
 if __name__ == '__main__':
     unittest.main()
