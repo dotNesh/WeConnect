@@ -3,3 +3,8 @@
 *.pytest_cache
 *.cpython-27-PYTEST.pyc
 *.coverage
+venv
+.DS_Store
+.vscode/
+Designs/.DS_Store
+Designs
