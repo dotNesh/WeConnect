@@ -51,6 +51,10 @@ def register_user():
     val_length = validate.pass_length(dict_data['password'])
     if val_length:
         return jsonify({'message': 'Password is weak! Must have atleast 8 characters'}), 406
+    val_email = validate.email_prtn(email)
+    if val_email:
+        return jsonify({'message': 'Email format is user@example.com'}), 406  
+        
     person = User.users.items()
     existing_email = {k:v for k, v in person if data['email'] == v['email']}
     existing_username = {k:v for k, v in person if data['username'] == v['username']}
@@ -136,32 +140,33 @@ def get_businesses():
     businesses = Business.get_all_businesses()
     return make_response(jsonify(businesses)), 200
 
-@app.route('/api/v1/businesses/<int:business_id>', methods=['PUT', 'DELETE'])
+@app.route('/api/v1/businesses/<int:business_id>', methods=['DELETE'])
 @jwt_required
-def one_business(business_id):
-    '''Route for update and delete'''
+def delete_business(business_id):
+    '''Route for deleting a business'''
     current_user = get_jwt_identity() #Current_user is username
     targetbusiness = Business.get_business(business_id)
+    if targetbusiness:
+        if current_user == targetbusiness['owner']:
+            deletebusiness = Business.delete_business(business_id)
+            return make_response(jsonify(deletebusiness)), 200
+        return jsonify({'message':'You cannot delete a business that is not yours'}), 401
+    return jsonify({'message':'Cannot Delete. Resourse Not Found'}), 404
 
-    if request.method == 'DELETE':
-        if targetbusiness:
-            if current_user == targetbusiness['owner']:
-                deletebusiness = Business.delete_business(business_id)
-                return make_response(jsonify(deletebusiness)), 200
-            else:
-                return jsonify({'message':'You cannot delete a business that is not yours'}), 401
-        else:
-            return jsonify({'message':'Cannot Delete. Resourse Not Found'}), 404
-    elif request.method == 'PUT':
-        if targetbusiness:
-            if current_user == targetbusiness['owner']:
-                data = request.get_json()
-                Business.update_business(business_id, data)
-                return jsonify({'message':'Successfully Updated'}), 201
-            else:
-                return jsonify({'message':'You cannot update a business that is not yours'}), 401
-        else:
-            return jsonify({'message':'Cannot Update. Resource Not Found'}), 404
+@app.route('/api/v1/businesses/<int:business_id>', methods=['PUT'])
+@jwt_required
+def update_business(business_id):
+    '''Route for updating a business'''
+    current_user = get_jwt_identity() #Current_user is username
+    targetbusiness = Business.get_business(business_id)
+    if targetbusiness:
+        if current_user == targetbusiness['owner']:
+            data = request.get_json()
+            Business.update_business(business_id, data)
+            return jsonify({'message':'Successfully Updated'}), 201
+        return jsonify({'message':'You cannot update a business that is not yours'}), 401
+        
+    return jsonify({'message':'Cannot Update. Resource Not Found'}), 404
 
 @app.route('/api/v1/businesses/<int:business_id>', methods=['GET'])
 def get_a_business(business_id):
