@@ -28,7 +28,7 @@ class User:
         })
         return self.users
     @staticmethod
-    def reset_password(user_name, data):
+    def change_password(user_name, data):
         '''Method to reset password'''
         person = User.users
         for key in person:
@@ -36,6 +36,7 @@ class User:
                 if 'new_password' in data.keys():
                     person[key]['password'] = generate_password_hash(data['new_password'])
                     return person
+    
 class Business:
     '''Business class'''
 
