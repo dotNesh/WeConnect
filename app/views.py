@@ -1,10 +1,22 @@
 '''views,py'''
-from app import validate
+import uuid
 from flask import jsonify, request, make_response
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_raw_jwt
 from app.models import User, Business, Reviews
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash,generate_password_hash
+from flask_mail import Mail, Message 
+from app import validate
 from app import app
+
+#Mail configuration
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'hcravens25@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ravens2018'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_DEFAULT_SENDER'] = 'hcravens25@gmail.com'
+mail = Mail(app)
 
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = 'super-secret'
@@ -36,9 +48,12 @@ def register_user():
     val_pass = validate.whitespace(dict_data['username'])
     if val_pass:
         return jsonify({'message': 'Username cannot contain white spaces'}), 406
+    val_length = validate.pass_length(dict_data['password'])
+    if val_length:
+        return jsonify({'message': 'Password is weak! Must have atleast 8 characters'}), 406
     person = User.users.items()
-    existing_email = {k:v for k, v in person if data['email'] in v['email']}
-    existing_username = {k:v for k, v in person if data['username'] in v['username']}
+    existing_email = {k:v for k, v in person if data['email'] == v['email']}
+    existing_username = {k:v for k, v in person if data['username'] == v['username']}
 
     if existing_email:
         return jsonify({'message': 'Email already existing.'}), 409
@@ -67,7 +82,7 @@ def login():
         result = validate.empty(**dict_data)
         return jsonify(result), 406
     person = User.users.items()
-    existing_user = {k:v for k, v in person if data['username'] in v['username']}
+    existing_user = {k:v for k, v in person if data['username'] == v['username']}
     if existing_user:
         valid_user = [v for v in existing_user.values()
                       if check_password_hash(v['password'], password)]
@@ -103,7 +118,7 @@ def register_business():
         result = validate.empty(**dict_data)
         return jsonify(result), 406
     biz = Business.business.items()
-    existing_business = {k:v for k, v in biz if data['business_name'] in v['business_name']}
+    existing_business = {k:v for k, v in biz if data['business_name'] == v['business_name']}
 
     if existing_business:
         return jsonify({"message":"Business name already exists"})
@@ -186,10 +201,10 @@ def logout():
     blacklist.add(dump)
     return jsonify({'message': 'Logout successful'}), 200
 
-@app.route('/api/v1/auth/reset-password', methods=['POST'])
+@app.route('/api/v1/auth/change-password', methods=['POST'])
 @jwt_required
-def reset_password():
-    '''Route to reset password'''
+def change_password():
+    '''Route to change password'''
     current_user = get_jwt_identity()
     data = request.get_json()
     old_password = data.get('old_password')
@@ -201,13 +216,49 @@ def reset_password():
     if validate.empty(**dict_data):
         result = validate.empty(**dict_data)
         return jsonify(result), 406
-
+    val_length = validate.pass_length(dict_data['new_password'])
+    if val_length:
+        return jsonify({'message': 'Password is weak! Must have atleast 8 characters'}), 406
     person = User.users.items()
-    existing_username = {k:v for k, v in person if current_user in v['username']}
+    existing_username = {k:v for k, v in person if current_user == v['username']}
     valid_user = [v for v in existing_username.values()
                   if check_password_hash(v['password'], old_password)]
     if valid_user:
-        User.reset_password(current_user, data)
+        User.change_password(current_user, data)
         return jsonify({'message': 'Reset successful'}), 200
     else:
         return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401
+
+@app.route('/api/v1/auth/reset-password', methods=['POST'])
+def reset_password():
+    '''Route to reset password'''
+    data = request.get_json()
+    username = data.get('username')
+
+    dict_data = {'username':username}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
+    
+    person = User.users.items()
+    existing_username = {k:v for k, v in person if username == v['username']}
+    print(existing_username)
+    
+
+    if existing_username:
+        for key in existing_username:
+            password = str(uuid.uuid4())[:8]
+            message = Message(
+                    subject="Password Reset",
+                    sender = 'hcravens25@gmail.com',
+                    recipients=[existing_username[key]['email']],
+                    body=f"Hello {existing_username[key]['username']},\n Your new password is: {password}")
+            mail.send(message)
+            existing_username[key]['password'] = generate_password_hash(password)
+        return jsonify({'message': 'An email has been sent with your new password!'}), 200
+
+    return jsonify({'message': 'Non-existent user. Try signing up'}), 404
+
