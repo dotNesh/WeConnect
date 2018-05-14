@@ -9,7 +9,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
         self.app = app.test_client(self)
         #User 1
         self.app.post("/api/v1/auth/register",
-                      data=json.dumps(dict(email="kelvin@live", username="kelvin",
+                      data=json.dumps(dict(email="kelvin@live.com", username="kelvin",
                                            password="12345678")),
                       content_type="application/json")
         self.login_user = self.app.post("/api/v1/auth/login",
@@ -20,7 +20,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
 
         #User 2
         self.app.post("/api/v1/auth/register",
-                      data=json.dumps(dict(email="lynn@live", username="lynn",
+                      data=json.dumps(dict(email="lynn@live.com", username="lynn",
                                            password="12345678")),
                       content_type="application/json")
         self.login_user2 = self.app.post("/api/v1/auth/login",
