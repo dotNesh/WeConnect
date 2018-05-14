@@ -25,3 +25,7 @@ def val_none(**data):
             message = {'message': key + ' cannot be missing'}
             messages.update({key+'-Error:':message})
     return messages
+
+def pass_length(data):
+    if len(data) < 8:
+        return True   
