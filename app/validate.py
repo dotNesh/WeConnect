@@ -28,4 +28,9 @@ def val_none(**data):
 
 def pass_length(data):
     if len(data) < 8:
-        return True   
+        return True
+
+def email_prtn(data):
+    pattern = re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",data)
+    if not pattern:
+        return True
