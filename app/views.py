@@ -54,7 +54,7 @@ def register_user():
     val_email = validate.email_prtn(email)
     if val_email:
         return jsonify({'message': 'Email format is user@example.com'}), 406  
-        
+
     person = User.users.items()
     existing_email = {k:v for k, v in person if data['email'] == v['email']}
     existing_username = {k:v for k, v in person if data['username'] == v['username']}
@@ -260,7 +260,7 @@ def reset_password():
                     subject="Password Reset",
                     sender = 'hcravens25@gmail.com',
                     recipients=[existing_username[key]['email']],
-                    body="Hello" + existing_username[key]['username'] +",\n Your new password is:" + password
+                    body="Hello " + existing_username[key]['username'] +",\n Your new password is:" + password
                     )
             mail.send(message)
             existing_username[key]['password'] = generate_password_hash(password)
