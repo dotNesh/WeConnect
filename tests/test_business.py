@@ -39,7 +39,7 @@ class BusinessendpointsTestCase(unittest.TestCase):
                           })
 
         self.dict = dict(business_name="Andela", category="software", location="Nairobi",
-                         description="This is Andela")
+                         description="This is Andela")                          
 
     def test_add_business(self):
         '''Test business registration'''

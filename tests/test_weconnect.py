@@ -14,7 +14,7 @@ class UserendpointsTestcase(unittest.TestCase):
                       data=json.dumps(dict(email="ed@live.com", username="ed",
                                            password="12345678")), content_type="application/json")
         self.app.post("/api/v1/auth/register",
-                      data=json.dumps(dict(email="dee@live.com", username="dee",
+                      data=json.dumps(dict(email="mwendarooney@gmail.com", username="dee",
                                            password="12345678")), content_type="application/json")
 
         self.user = self.app.post("/api/v1/auth/login",
@@ -28,7 +28,8 @@ class UserendpointsTestcase(unittest.TestCase):
 
         self.user2 = self.app.post("/api/v1/auth/login",
                              data=json.dumps(dict(username="dee", password="12345678")),
-                             content_type="application/json")                                           
+                             content_type="application/json")
+                                          
 
     def test_user_register(self):
         '''Test User Registration method'''
@@ -148,7 +149,7 @@ class UserendpointsTestcase(unittest.TestCase):
     def test_email_already_registered(self):
         '''Test for existing email'''
         response = self.app.post("/api/v1/auth/register",
-                                 data=json.dumps(dict(email="dee@live.com", username="kelin",
+                                 data=json.dumps(dict(email="mwendarooney@gmail.com", username="kelin",
                                                       password="12345678")),
                                  content_type="application/json")
 
